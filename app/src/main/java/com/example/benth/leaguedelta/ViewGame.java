@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -35,7 +36,7 @@ public class ViewGame extends AppCompatActivity
 
         enemies.addAll(all.stream().filter(c -> c.getTeamId() != team).collect(toList()));
 
-        ImageButton back = (ImageButton) findViewById(R.id.back);
+        ImageButton back = findViewById(R.id.back);
         back.setOnClickListener((View v) ->
                 onBackPressed());
 
@@ -45,8 +46,8 @@ public class ViewGame extends AppCompatActivity
         long id = search.summoner.getAccountId();
         Context c;
 
-        im = (ImageButton) findViewById(R.id.opponent0);
-        champ = Utilities.champIdToChampName(enemies.get(0).getChampionId(),true);
+        im = findViewById(R.id.opponent0);
+        champ = Utilities.champIdToChampName(enemies.get(0).getChampionId(),true,getApplicationContext());
         c = im.getContext();
         imageId = c.getResources().getIdentifier(champ, "drawable", c.getPackageName());
         im.setImageDrawable(getDrawable(imageId));
@@ -58,8 +59,8 @@ public class ViewGame extends AppCompatActivity
             startActivity(in);
         });
 
-        im = (ImageButton) findViewById(R.id.opponent1);
-        champ = Utilities.champIdToChampName(enemies.get(1).getChampionId(),true);
+        im = findViewById(R.id.opponent1);
+        champ = Utilities.champIdToChampName(enemies.get(1).getChampionId(),true,getApplicationContext());
         c = im.getContext();
         imageId = c.getResources().getIdentifier(champ, "drawable", c.getPackageName());
         im.setImageDrawable(getDrawable(imageId));
@@ -71,8 +72,8 @@ public class ViewGame extends AppCompatActivity
             startActivity(in);
         });
 
-        im = (ImageButton) findViewById(R.id.opponent2);
-        champ = Utilities.champIdToChampName(enemies.get(2).getChampionId(),true);
+        im = findViewById(R.id.opponent2);
+        champ = Utilities.champIdToChampName(enemies.get(2).getChampionId(),true,getApplicationContext());
         c = im.getContext();
         imageId = c.getResources().getIdentifier(champ, "drawable", c.getPackageName());
         im.setImageDrawable(getDrawable(imageId));
@@ -84,8 +85,8 @@ public class ViewGame extends AppCompatActivity
             startActivity(in);
         });
 
-        im = (ImageButton) findViewById(R.id.opponent3);
-        champ = Utilities.champIdToChampName(enemies.get(3).getChampionId(),true);
+        im = findViewById(R.id.opponent3);
+        champ = Utilities.champIdToChampName(enemies.get(3).getChampionId(),true,getApplicationContext());
         c = im.getContext();
         imageId = c.getResources().getIdentifier(champ, "drawable", c.getPackageName());
         im.setImageDrawable(getDrawable(imageId));
@@ -98,8 +99,8 @@ public class ViewGame extends AppCompatActivity
         });
 
 
-        im = (ImageButton) findViewById(R.id.opponent4);
-        champ = Utilities.champIdToChampName(enemies.get(4).getChampionId(),true);
+        im = findViewById(R.id.opponent4);
+        champ = Utilities.champIdToChampName(enemies.get(4).getChampionId(),true,getApplicationContext());
         c = im.getContext();
         imageId = c.getResources().getIdentifier(champ, "drawable", c.getPackageName());
         im.setImageDrawable(getDrawable(imageId));

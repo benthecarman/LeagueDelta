@@ -19,8 +19,7 @@ class SummonerInfo
     Bitmap icon;
     List<Match> matches;
 
-    SummonerInfo(LeaguePosition r, @Nullable List<ChampionMastery> m, Summoner s, Bitmap i, List<Match> ma)
-    {
+    SummonerInfo(LeaguePosition r, @Nullable List<ChampionMastery> m, Summoner s, Bitmap i, List<Match> ma) {
         rank = r;
         mastery = m;
         summoner = s;

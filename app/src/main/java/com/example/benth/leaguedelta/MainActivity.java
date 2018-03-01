@@ -1,5 +1,6 @@
 package com.example.benth.leaguedelta;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        editText = (EditText) findViewById(R.id.summoner_name);
-        spinner = (Spinner) findViewById(R.id.region);
-        text = (TextView) findViewById(R.id.data);
+        editText = findViewById(R.id.summoner_name);
+        spinner = findViewById(R.id.region);
+        text = findViewById(R.id.data);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String defaultName = sharedPref.getString("summoner_name", "");
         String defaultRegion = sharedPref.getString("preferred_region", "NA");
@@ -180,8 +182,7 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
-        }
-        else if (id == R.id.action_about) {
+        } else if (id == R.id.action_about) {
             startActivity(new Intent(this, About.class));
             return true;
         }
@@ -189,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class SummonerLookup extends AsyncTask<String, Void, Search> {
         @Override
         protected Search doInBackground(String... params) {
@@ -218,14 +220,16 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
                     platform = Platform.NA;
             }
 
+            Constants.platform = platform;
+
             Summoner sum;
             CurrentGameInfo cgi;
 
             try {
                 //String name = api.getSummonerByName(platform, params[0].replaceAll("\\s+", "").toLowerCase());
+                //FIXME for real use
 
-                List<FeaturedGameInfo> gameInfoList = api.getFeaturedGames(platform).getGameList();
-
+                List<FeaturedGameInfo> gameInfoList = api.getFeaturedGames(platform).getGameList();//I am for testing <
                 int i = -1;
                 for (FeaturedGameInfo f : gameInfoList) {
                     if (f.getMapId() == 11) {
@@ -234,7 +238,6 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
                     }
                     i++;
                 }
-
                 if (i == -1) {
                     for (FeaturedGameInfo f : gameInfoList) {
                         if (f.getParticipants().size() == 10) {
@@ -243,9 +246,8 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
                         }
                         i++;
                     }
-                }
+                }//I am for testing >
 
-                //FIXME
                 sum = api.getSummonerByName(platform, gameInfoList.get(i).getParticipants().get(0).getSummonerName());
 
             } catch (Exception e) {
@@ -284,14 +286,16 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
                     Map<String, Champion> championMap = championList.getData();
                     StringBuilder champs = new StringBuilder();
                     for (Champion champion : championMap.values()) {
-                        champs.append("").append(champion.getId());
+                        champs.append("").append(champion.getId()).append(" ").append(champion.getName().replace(" ",""));
                         for (ChampionSpell spell : champion.getSpells()) {
                             champs.append(" ").append(spell.getCooldownBurn());
                         }
                         champs.append("\n");
-                    }/*Format:(champID) (qCD) (wCD) (eCD) (rCD)\n */
+                    }/*Format:(champID) (name) (qCD) (wCD) (eCD) (rCD)\n */
                     fos.write(champs.toString().getBytes());
                     fos.close();
+
+
                     /*
                     ProfileIconData profileIconData = api.getDataProfileIcons(platform);
                     fos = openFileOutput(getString(R.string.ICONFILENAME), Context.MODE_PRIVATE);
