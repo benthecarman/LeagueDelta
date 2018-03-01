@@ -3,6 +3,7 @@ package com.example.benth.leaguedelta;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -188,15 +189,27 @@ public class Matchup extends AppCompatActivity {
             List<Integer> cds = Utilities.getSummonerCooldown(matchup.spell1, matchup.spell2, hasCosmicInsight, hasSpellBook, c);
 
             TextView ss1_icon = rootView.findViewById(R.id.ss1_cd);
-            int ss1ImageId = c.getResources().getIdentifier(Utilities.summonerSpellIdToName(matchup.spell1, true), "drawable", c.getPackageName());
-            Drawable d1 = ContextCompat.getDrawable(this.getContext(), ss1ImageId);
+            Bitmap s1 = Utilities.getSummonerSpellIcon(matchup.spell1, getContext());
+            Drawable d1;
+            if (s1 != null)
+                d1 = new BitmapDrawable(getResources(), s1);
+            else {
+                int ss1ImageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
+                d1 = ContextCompat.getDrawable(this.getContext(), ss1ImageId);
+            }
             d1.setBounds(0, 0, 180, 180);
             ss1_icon.setCompoundDrawables(null, d1, null, null);
             ss1_icon.setText("" + cds.get(0) + " s");
 
             TextView ss2_icon = rootView.findViewById(R.id.ss2_cd);
-            int ss2ImageId = c.getResources().getIdentifier(Utilities.summonerSpellIdToName(matchup.spell2, true), "drawable", c.getPackageName());
-            Drawable d2 = ContextCompat.getDrawable(this.getContext(), ss2ImageId);
+            Bitmap s2 = Utilities.getSummonerSpellIcon(matchup.spell2, getContext());
+            Drawable d2;
+            if (s2 != null)
+                d2 = new BitmapDrawable(getResources(), s2);
+            else {
+                int ss2ImageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
+                d2 = ContextCompat.getDrawable(this.getContext(), ss2ImageId);
+            }
             d2.setBounds(0, 0, 180, 180);
             ss2_icon.setCompoundDrawables(null, d2, null, null);
             ss2_icon.setText("" + cds.get(1) + " s");

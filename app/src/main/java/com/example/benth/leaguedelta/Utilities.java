@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,7 +37,7 @@ class Utilities {
                 return "50 - 25 s";
             case 8124://Predator
                 return "150 - 100 s";
-            case 8128:
+            case 8128://Dark Harvest
                 return "20 / 300 s";
             case 8214://Summon Aery
                 return "2s";
@@ -51,7 +50,7 @@ class Utilities {
             case 8465://Guardian
                 return "70 - 40 s";
             default://Others
-                return "";
+                return "No CD";
         }
     }
 
@@ -156,9 +155,6 @@ class Utilities {
             if (isUlt && lvl >= 11 && hasUltHat)
                 multi = multi * 1.15;
 
-            Log.d("Multi", multi + "");
-
-
             if (multi > .45 && hasCosmicInsight)
                 multi = .45;
             else if (multi > .4 && !hasCosmicInsight)
@@ -222,11 +218,6 @@ class Utilities {
                 cd2 = Double.parseDouble(scan.next());
             scan.close();
         }
-
-        if (id1 == 12)
-            cd1 = 300;
-        else if (id2 == 12)
-            cd2 = 300;
 
         double multi = 1;
 
@@ -299,6 +290,47 @@ class Utilities {
                     break;
             }
             break;
+        }
+
+        if (name.equals(""))
+            return null;
+
+        String url = "http://ddragon.leagueoflegends.com/cdn/" + Constants.LOL_VERSION + "/img/spell/" + name;
+
+        try {
+            return new IconLookUp().execute(url).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    static Bitmap getSummonerSpellIcon(int summonerSpellID, Context context) {
+        ArrayList<Byte> bytes = new ArrayList<>();
+        try {
+            FileInputStream fis = context.openFileInput(context.getString(R.string.SSFILENAME));
+            while (fis.available() > 0)
+                bytes.add((byte) fis.read());
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        byte[] b = new byte[bytes.size()];
+        for (int z = 0; z < bytes.size(); ++z)
+            b[z] = bytes.get(z);
+        Scanner scanner = new Scanner(new String(b, StandardCharsets.UTF_8));
+
+        String name = "";
+
+        while (scanner.hasNextLine()) {
+            String str = scanner.nextLine();
+            Scanner scan = new Scanner(str);
+            int id = Integer.parseInt(scan.next());
+            if (summonerSpellID == id) {
+                scan.next();
+                name = scan.next();
+            }
+            scan.close();
         }
 
         if (name.equals(""))

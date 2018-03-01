@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -276,13 +275,14 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
                     fos.close();
 
                     fos = openFileOutput(getString(R.string.SSFILENAME), Context.MODE_PRIVATE);
-                    SummonerSpellList ssl = api.getDataSummonerSpellList(platform, null, null, true, SpellListTags.COOLDOWN);
+                    SummonerSpellList ssl = api.getDataSummonerSpellList(platform, Locale.EN_US, newVersion, true, SpellListTags.COOLDOWN, SpellListTags.IMAGE);
                     Map<String, SummonerSpell> ssMap = ssl.getData();
                     StringBuilder summoners = new StringBuilder();
                     for (SummonerSpell ss : ssMap.values())
-                        summoners.append("").append(ss.getId()).append(" ").append(ss.getCooldown().get(0)).append("\n");
-                    /*Format: (SummonerSpellID) (SummonerSpellCD)\n */
+                        summoners.append("").append(ss.getId()).append(" ").append(ss.getCooldown().get(0)).append(" ").append(ss.getImage().getFull()).append("\n");
+                    /*Format: (SummonerSpellID) (SummonerSpellCD) (SummonerSpellIcon)\n */
                     fos.write(summoners.toString().getBytes());
+
                     fos.close();
 
                     fos = openFileOutput(getString(R.string.CHAMPFILENAME), Context.MODE_PRIVATE);
