@@ -124,7 +124,6 @@ class Utilities {
                 break;
         }
 
-
         List<String> cds = new LinkedList<>();
         cds.add(q);
         cds.add(w);
@@ -134,7 +133,7 @@ class Utilities {
         return cds;
     }
 
-    public static String adjustCD(String cds, boolean hasUltHat, boolean isUlt, boolean hasCosmicInsight, boolean hasCelerity, int added) {
+    private static String adjustCD(String cds, boolean hasUltHat, boolean isUlt, boolean hasCosmicInsight, boolean hasCelerity, int added) {
         cds = cds.replaceAll("/", " ");
         Scanner scanner = new Scanner(cds);
         List<Double> base = new LinkedList<>();
@@ -246,40 +245,6 @@ class Utilities {
         scanner.close();
         return list;
     }
-
-    /*static int[] getProfileIconDimens(long id, Context context)
-    {
-        int[] dimens = new int[0];
-        ArrayList<Byte> bytes = new ArrayList<>();
-        try {
-            FileInputStream fis = context.openFileInput(context.getString(R.string.ICONFILENAME));
-            while (fis.available()>0)
-                bytes.add((byte) fis.read());
-            fis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        byte[] b = new byte[bytes.size()];
-        for(int z = 0;z<bytes.size();++z)
-            b[z] = bytes.get(z);
-        Scanner scanner = new Scanner(new String(b, StandardCharsets.UTF_8));
-
-        while(scanner.hasNextLine())
-        {
-            String str = scanner.nextLine();
-            Scanner scan = new Scanner(str);
-            int cur = Integer.parseInt(scan.next());
-            if(id == cur)
-                dimens = new int[]{scan.nextInt(), scan.nextInt(), scan.nextInt(), scan.nextInt()};
-
-            scan.close();
-        }
-
-        if(dimens.length == 0)
-            return null;
-
-        return dimens;
-    }*/
 
     static Bitmap getChampAbilityIcon(int id, int ability, Context context) {
         if (ability > 4 || ability < 0)
@@ -444,11 +409,7 @@ class Utilities {
         }
     }
 
-    private static String champToFile(String name) {
-        return name == null || name.equals("") ? "" : name.toLowerCase().replaceAll(" ", "").replaceAll("\\.", "").replaceAll("'", "");
-    }
-
-    static String champIdToChampName(int id, boolean wantFile, Context context) {
+    static String champIdToChampName(int id, Context context) {
 
         ArrayList<Byte> bytes = new ArrayList<>();
         try {
@@ -475,7 +436,7 @@ class Utilities {
             scan.close();
             scanner.close();
 
-            return wantFile ? champToFile(name) : name.replaceAll("([A-Z])", " $1").replaceAll("\' ", "'").trim();
+            return name.replaceAll("([A-Z])", " $1").replaceAll("\' ", "'").trim();
         }
 
         return "";

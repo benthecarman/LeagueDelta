@@ -110,8 +110,7 @@ public class Matchup extends AppCompatActivity {
             if(PreferenceManager.getDefaultSharedPreferences(rootView.getContext()).getBoolean("Night Mode", false))
                 rootView.findViewById(R.id.base3).setBackground(rootView.getContext().getDrawable(R.drawable.bgd));
 
-            String champ = Utilities.champIdToChampName(matchup.enemyChampId, false, getContext());
-            String fileChamp = Utilities.champIdToChampName(matchup.enemyChampId, true, getContext());
+            String champ = Utilities.champIdToChampName(matchup.enemyChampId, getContext());
 
             ImageView opponent = rootView.findViewById(R.id.opponent);
             Context c = rootView.getContext();
@@ -342,9 +341,9 @@ public class Matchup extends AppCompatActivity {
 
             if (summonerInfo.mastery != null) {
                 masteryRank.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier("mastery" + current.getChampionLevel(), "drawable", root.getContext().getPackageName())));
-                masteryScore.setText(getString(R.string.mastery_score, Utilities.champIdToChampName(matchup.enemyChampId, false, getContext()), current.getChampionPoints()));
+                masteryScore.setText(getString(R.string.mastery_score, Utilities.champIdToChampName(matchup.enemyChampId, getContext()), current.getChampionPoints()));
             } else {
-                masteryRank.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier(Utilities.champIdToChampName(matchup.enemyChampId, true, getContext()), "drawable", root.getContext().getPackageName())));
+                masteryRank.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier(Utilities.champIdToChampName(matchup.enemyChampId, getContext()), "drawable", root.getContext().getPackageName())));
                 masteryScore.setText(getString(R.string.no_score));
             }
 
@@ -378,9 +377,25 @@ public class Matchup extends AppCompatActivity {
 
             doInfo();
 
-            mastery1.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier(Utilities.champIdToChampName(summonerInfo.mastery.get(0).getChampionId(), true, getContext()), "drawable", root.getContext().getPackageName())));
-            mastery2.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier(Utilities.champIdToChampName(summonerInfo.mastery.get(1).getChampionId(), true, getContext()), "drawable", root.getContext().getPackageName())));
-            mastery3.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier(Utilities.champIdToChampName(summonerInfo.mastery.get(2).getChampionId(), true, getContext()), "drawable", root.getContext().getPackageName())));
+            Bitmap bitmap;
+
+            bitmap = Utilities.getChampIcon(Utilities.champIdToChampName(summonerInfo.mastery.get(0).getChampionId(), getContext()));
+            if(bitmap != null)
+                mastery1.setImageBitmap(bitmap);
+            else
+                mastery1.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier("invalid", "drawable", root.getContext().getPackageName())));
+
+            bitmap = Utilities.getChampIcon(Utilities.champIdToChampName(summonerInfo.mastery.get(1).getChampionId(), getContext()));
+            if(bitmap != null)
+                mastery2.setImageBitmap(bitmap);
+            else
+                mastery2.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier("invalid", "drawable", root.getContext().getPackageName())));
+
+            bitmap = Utilities.getChampIcon(Utilities.champIdToChampName(summonerInfo.mastery.get(2).getChampionId(), getContext()));
+            if(bitmap != null)
+                mastery3.setImageBitmap(bitmap);
+            else
+                mastery3.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier("invalid", "drawable", root.getContext().getPackageName())));
 
             masteryPoints1.setText(getString(R.string.points, summonerInfo.mastery.get(0).getChampionPoints()));
             masteryPoints2.setText(getString(R.string.points, summonerInfo.mastery.get(1).getChampionPoints()));

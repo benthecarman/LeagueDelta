@@ -3,11 +3,9 @@ package com.example.benth.leaguedelta;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -54,7 +52,7 @@ public class ViewGame extends AppCompatActivity
         Bitmap bitmap;
 
         im = findViewById(R.id.opponent0);
-        champ = Utilities.champIdToChampName(enemies.get(0).getChampionId(),false,getApplicationContext());
+        champ = Utilities.champIdToChampName(enemies.get(0).getChampionId(), getApplicationContext());
         c = im.getContext();
         bitmap = Utilities.getChampIcon(champ);
         if(bitmap != null)
@@ -72,7 +70,7 @@ public class ViewGame extends AppCompatActivity
         });
 
         im = findViewById(R.id.opponent1);
-        champ = Utilities.champIdToChampName(enemies.get(1).getChampionId(),false,getApplicationContext());
+        champ = Utilities.champIdToChampName(enemies.get(1).getChampionId(), getApplicationContext());
         c = im.getContext();
         bitmap = Utilities.getChampIcon(champ);
         if(bitmap != null)
@@ -90,7 +88,7 @@ public class ViewGame extends AppCompatActivity
         });
 
         im = findViewById(R.id.opponent2);
-        champ = Utilities.champIdToChampName(enemies.get(2).getChampionId(),false,getApplicationContext());
+        champ = Utilities.champIdToChampName(enemies.get(2).getChampionId(), getApplicationContext());
         c = im.getContext();
         bitmap = Utilities.getChampIcon(champ);
         if(bitmap != null)
@@ -108,7 +106,7 @@ public class ViewGame extends AppCompatActivity
         });
 
         im = findViewById(R.id.opponent3);
-        champ = Utilities.champIdToChampName(enemies.get(3).getChampionId(),false,getApplicationContext());
+        champ = Utilities.champIdToChampName(enemies.get(3).getChampionId(), getApplicationContext());
         c = im.getContext();
         bitmap = Utilities.getChampIcon(champ);
         if(bitmap != null)
@@ -127,7 +125,7 @@ public class ViewGame extends AppCompatActivity
 
 
         im = findViewById(R.id.opponent4);
-        champ = Utilities.champIdToChampName(enemies.get(4).getChampionId(),false,getApplicationContext());
+        champ = Utilities.champIdToChampName(enemies.get(4).getChampionId(), getApplicationContext());
         c = im.getContext();
         bitmap = Utilities.getChampIcon(champ);
         if(bitmap != null)
