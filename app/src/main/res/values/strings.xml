@@ -21,7 +21,7 @@
     <string name="VERSIONFILENAME">version_file</string>
     <string name="SSFILENAME">ss_file</string>
     <string name="CHAMPFILENAME">champ_file</string>
-    <string name="ICONFILENAME">profile_icon_file</string>
+    <string name="ABILITYFILENAME">ability_file</string>
     <string name="passive_ability">Passive ability</string>
     <string name="mastery_score">%1$s Mastery Score: %2$,d</string>
     <string name="reset">Reset</string>

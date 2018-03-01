@@ -232,7 +232,8 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
                 //String name = api.getSummonerByName(platform, params[0].replaceAll("\\s+", "").toLowerCase());
                 //FIXME for real use
 
-                List<FeaturedGameInfo> gameInfoList = api.getFeaturedGames(platform).getGameList();//I am for testing <
+                //I am for testing <
+                List<FeaturedGameInfo> gameInfoList = api.getFeaturedGames(platform).getGameList();
                 int i = -1;
                 for (FeaturedGameInfo f : gameInfoList) {
                     if (f.getMapId() == 11) {
@@ -290,27 +291,25 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
                     StringBuilder champs = new StringBuilder();
                     for (Champion champion : championMap.values()) {
                         champs.append("").append(champion.getId()).append(" ").append(champion.getName().replace(" ",""));
-                        for (ChampionSpell spell : champion.getSpells()) {
+                        for (ChampionSpell spell : champion.getSpells())
                             champs.append(" ").append(spell.getCooldownBurn());
-                        }
                         champs.append("\n");
                     }/*Format:(champID) (name) (qCD) (wCD) (eCD) (rCD)\n */
                     fos.write(champs.toString().getBytes());
                     fos.close();
 
-
-                    /*
-                    ProfileIconData profileIconData = api.getDataProfileIcons(platform);
-                    fos = openFileOutput(getString(R.string.ICONFILENAME), Context.MODE_PRIVATE);
-                    Map<String, ProfileIconDetails> iconMap = profileIconData.getData();
-                    String data = "";
-                    for(ProfileIconDetails d:iconMap.values())
-                    {
-                        data+=""+d.getId()+" "+d.getImage().getH()+" "+d.getImage().getW()+" "+d.getImage().getX()+" "+d.getImage().getY()+"\n";
-                    }//Format: (ID) (h) (w) (x) (y)\n
-                    fos.write(data.getBytes());
-                    fos.close();*/
-
+                    fos = openFileOutput(getString(R.string.ABILITYFILENAME), Context.MODE_PRIVATE);
+                    championList = api.getDataChampionList(platform, Locale.EN_US, newVersion, true, ChampionListTags.SPELLS);
+                    championMap = championList.getData();
+                    StringBuilder spells = new StringBuilder();
+                    for (Champion champion : championMap.values()) {
+                        spells.append(champion.getId());
+                        for (ChampionSpell spell : champion.getSpells())
+                            spells.append(" ").append(spell.getImage().getFull());
+                        spells.append("\n");
+                    }/*Format:(champID) (qIcon) (wIcon) (eIcon) (rIcon)\n */
+                    fos.write(spells.toString().getBytes());
+                    fos.close();
                 }
             } catch (RiotApiException | IOException e) {
                 e.printStackTrace();

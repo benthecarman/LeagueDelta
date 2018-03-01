@@ -281,6 +281,74 @@ class Utilities {
         return dimens;
     }*/
 
+    static Bitmap getChampAbilityIcon(int id, int ability, Context context) {
+        if (ability > 4 || ability < 0)
+            return null;
+
+        String name = "";
+
+        ArrayList<Byte> bytes = new ArrayList<>();
+        try {
+            FileInputStream fis = context.openFileInput(context.getString(R.string.ABILITYFILENAME));
+            while (fis.available() > 0)
+                bytes.add((byte) fis.read());
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        byte[] b = new byte[bytes.size()];
+        for (int z = 0; z < bytes.size(); ++z)
+            b[z] = bytes.get(z);
+
+        Scanner scanner = new Scanner(new String(b, StandardCharsets.UTF_8));
+
+        while (scanner.hasNextLine()) {
+            String str = scanner.nextLine();
+            Scanner scan = new Scanner(str);
+            if (id != Integer.parseInt(scan.next()))
+                continue;
+
+            String q = scan.next();
+            String w = scan.next();
+            String e = scan.next();
+            String r = scan.next();
+
+            scan.close();
+            scanner.close();
+
+            switch (ability) {
+                case 0:
+                    name = q;
+                    break;
+                case 1:
+                    name = w;
+                    break;
+                case 2:
+                    name = e;
+                    break;
+                case 3:
+                    name = r;
+                    break;
+                default:
+                    name = "";
+                    break;
+            }
+            break;
+        }
+
+        if (name.equals(""))
+            return null;
+
+        String url = "http://ddragon.leagueoflegends.com/cdn/" + Constants.LOL_VERSION + "/img/spell/" + name;
+
+        try {
+            return new IconLookUp().execute(url).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     static Bitmap getChampIcon(String name) {
 
         name = name.replaceAll(" ", "").replace("'", "").replace(".", "");

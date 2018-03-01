@@ -144,26 +144,46 @@ public class Matchup extends AppCompatActivity {
             currentCDR.setText(getString(R.string.current_cdr, cdr));
 
             ImageView qIcon = rootView.findViewById(R.id.q_icon);
-            int qImageId = c.getResources().getIdentifier(fileChamp.concat("q"), "drawable", c.getPackageName());
-            qIcon.setImageDrawable(ContextCompat.getDrawable(this.getContext(), qImageId));
+            Bitmap bq = Utilities.getChampAbilityIcon(matchup.enemyChampId,0,getContext());
+            if(bq != null)
+                qIcon.setImageBitmap(bq);
+            else {
+                int qImageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
+                qIcon.setImageDrawable(ContextCompat.getDrawable(this.getContext(), qImageId));
+            }
             TextView qLabel = rootView.findViewById(R.id.q_label);
             qLabel.setText(abilityCooldowns.get(0));
 
             ImageView wIcon = rootView.findViewById(R.id.w_icon);
-            int wImageId = c.getResources().getIdentifier(fileChamp.concat("w"), "drawable", c.getPackageName());
-            wIcon.setImageDrawable(ContextCompat.getDrawable(this.getContext(), wImageId));
+            Bitmap bw = Utilities.getChampAbilityIcon(matchup.enemyChampId,1,getContext());
+            if(bw != null)
+                wIcon.setImageBitmap(bw);
+            else {
+                int wImageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
+                wIcon.setImageDrawable(ContextCompat.getDrawable(this.getContext(), wImageId));
+            }
             TextView wLabel = rootView.findViewById(R.id.w_label);
             wLabel.setText(abilityCooldowns.get(1));
 
             ImageView eIcon = rootView.findViewById(R.id.e_icon);
-            int eImageId = c.getResources().getIdentifier(fileChamp.concat("e"), "drawable", c.getPackageName());
-            eIcon.setImageDrawable(ContextCompat.getDrawable(this.getContext(), eImageId));
+            Bitmap be = Utilities.getChampAbilityIcon(matchup.enemyChampId,2,getContext());
+            if(be != null)
+                eIcon.setImageBitmap(be);
+            else {
+                int eImageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
+                eIcon.setImageDrawable(ContextCompat.getDrawable(this.getContext(), eImageId));
+            }
             TextView eLabel = rootView.findViewById(R.id.e_label);
             eLabel.setText(abilityCooldowns.get(2));
 
             ImageView rIcon = rootView.findViewById(R.id.r_icon);
-            int rImageId = c.getResources().getIdentifier(fileChamp.concat("r"), "drawable", c.getPackageName());
-            rIcon.setImageDrawable(ContextCompat.getDrawable(this.getContext(), rImageId));
+            Bitmap br = Utilities.getChampAbilityIcon(matchup.enemyChampId,3,getContext());
+            if(br != null)
+                rIcon.setImageBitmap(br);
+            else {
+                int rImageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
+                rIcon.setImageDrawable(ContextCompat.getDrawable(this.getContext(), rImageId));
+            }
             TextView rLabel = rootView.findViewById(R.id.r_label);
             rLabel.setText(abilityCooldowns.get(3));
 
@@ -443,11 +463,11 @@ public class Matchup extends AppCompatActivity {
                     mastery = null;
                 }
                 try {
-/*
+                    /*
                     List<MatchReference> matches = api.getRecentMatchListByAccountId(matchup.platform,api.getSummoner(matchup.platform,matchup.enemySummonerId).getAccountId()).getMatches();
                     for(MatchReference m: matches)
                         matchList.add(api.getMatch(matchup.platform, m.getGameId()));
-*/
+                    */
                 } catch (Exception e) {
                     matchList = null;
                     e.printStackTrace();
