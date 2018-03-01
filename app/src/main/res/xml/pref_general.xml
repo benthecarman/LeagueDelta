@@ -36,4 +36,12 @@
         android:icon="@drawable/teleport"
         />
 
+    <SwitchPreference
+        android:key="Night Mode"
+        android:negativeButtonText="Day Mode"
+        android:positiveButtonText="Night Mode"
+        android:title="@string/night_mode"
+        android:icon="@drawable/leonaw"
+        />
+
 </PreferenceScreen>

@@ -1,5 +1,13 @@
+<!DOCTYPE resources [
+    <!ENTITY appname "LeagueDelta">
+    <!ENTITY author "benthecarman">
+    <!ENTITY version "0.1.0">
+    ]>
+
 <resources>
-    <string name="app_name">League Delta</string>
+    <string name="app_name">&appname;</string>
+    <string name="author">&author;</string>
+    <string name="version">&version;</string>
     <string name="search">Search</string>
     <string name="enter">Enter Summoner Name</string>
     <string name="notInGame">User is not currently in a game</string>
@@ -19,7 +27,7 @@
     <string name="reset">Reset</string>
     <string name="plus10">+10% CDR</string>
     <string name="plus20">+20% CDR</string>
-    <string name="current_cdr">CDR Added: %d</string>
+    <string name="current_cdr">Current CDR: %d</string>
     <string name="no_score">No Champion Mastery Available</string>
     <string name="master">Master</string>
     <string name="challenger">Challenger</string>
@@ -30,7 +38,7 @@
     <string name="points">%,d points</string>
     <string name="about">About</string>
     <string name="action_about">About</string>
-    <string name="copyright">LeagueDelta isn\'t endorsed by Riot Games and doesn\'t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</string>
+    <string name="copyright">&appname; isn\'t endorsed by Riot Games and doesn\'t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</string>
 
     <string-array name="regions">
         <item>NA</item>
@@ -56,6 +64,7 @@
     <string name="pref_header_general">General</string>
     <string name="preferred_region">Preferred Region</string>
     <string name="preferred_name">Summoner Name</string>
+    <string name="night_mode">Night Mode</string>
     <string name="title_activity_settings2">Settings</string>
 
     <string name="pref_title_social_recommendations">Enable social recommendations</string>

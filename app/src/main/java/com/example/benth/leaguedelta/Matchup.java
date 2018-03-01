@@ -1,5 +1,6 @@
 package com.example.benth.leaguedelta;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -29,8 +30,7 @@ import net.rithms.riot.api.endpoints.league.dto.LeaguePosition;
 import net.rithms.riot.api.endpoints.match.dto.Match;
 import net.rithms.riot.api.endpoints.match.dto.MatchReference;
 import net.rithms.riot.api.endpoints.match.dto.ParticipantStats;
-import net.rithms.riot.api.endpoints.spectator.dto.Mastery;
-import net.rithms.riot.api.endpoints.spectator.dto.Rune;
+import net.rithms.riot.api.endpoints.spectator.dto.Perks;
 import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
 
 import java.util.LinkedList;
@@ -101,6 +101,7 @@ public class Matchup extends AppCompatActivity {
             return inflater.inflate(R.layout.fragment_matchup, container, false);
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         public void onViewCreated(View rootView, Bundle savedInstanceState)
         {
@@ -125,6 +126,9 @@ public class Matchup extends AppCompatActivity {
             double cdrScaling = 0.0;
             boolean hasMast = false;
 
+            //matchup.
+
+            /*
             for (Mastery m:matchup.masteries)
             {
                 if(m.getMasteryId() == 6241)
@@ -143,7 +147,7 @@ public class Matchup extends AppCompatActivity {
                 int id = r.getRuneId();
                 cdrFlat += (Utilities.getRuneFlatCDR(id)*10);
                 cdrScaling += (Utilities.getRuneScalingCDR(id)*10);
-            }
+            } */
 
             List<String> abilityCooldowns = Utilities.getAbilityCooldowns(matchup.enemyChampId,cdrFlat,cdrScaling,hasMast,c);
 
@@ -436,6 +440,7 @@ public class Matchup extends AppCompatActivity {
             info3.setImageAlpha(0);
         }
 
+        @SuppressLint("StaticFieldLeak")
         private class SummonerLookup extends AsyncTask<String, Void, SummonerInfo> {
             @Override
             protected SummonerInfo doInBackground(String... params) {
@@ -455,12 +460,12 @@ public class Matchup extends AppCompatActivity {
                     mastery = null;
                 }
                 try {
-
+/*
                     List<MatchReference> matches = api.getRecentMatchListByAccountId(matchup.platform,api.getSummoner(matchup.platform,matchup.enemySummonerId).getAccountId()).getMatches();
                     for(MatchReference m: matches)
                         matchList.add(api.getMatch(matchup.platform, m.getGameId()));
-
-                }catch (RiotApiException | NullPointerException e) {
+*/
+                }catch (Exception e) {
                     matchList = null;
                     e.printStackTrace();
                 }
