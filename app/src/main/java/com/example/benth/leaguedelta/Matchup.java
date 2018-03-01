@@ -136,7 +136,6 @@ public class Matchup extends AppCompatActivity {
                 if (Utilities.isKeystone(l))
                     keyStoneID = (int) l;
 
-
             List<String> abilityCooldowns = Utilities.getAbilityCooldowns(matchup.enemyChampId, cdr, hasUltHat, hasCosmicInsight, hasCelerity, c);
 
             TextView currentCDR = rootView.findViewById(R.id.current_cdr);
