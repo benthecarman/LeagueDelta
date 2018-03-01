@@ -1,0 +1,128 @@
+<resources>
+    <string name="app_name">League Delta</string>
+    <string name="search">Search</string>
+    <string name="enter">Enter Summoner Name</string>
+    <string name="notInGame">User is not currently in a game</string>
+    <string name="error">Error!</string>
+    <string name="dne">User does not exist</string>
+    <string name="api_key">Nice try</string>
+    <string name="choose">Choose your lane opponent</string>
+    <string name="invalid">Invalid</string>
+    <string name="icon_desc">icon for given ability</string>
+    <string name="loading">Loading…</string>
+    <string name="VERSIONFILENAME">version_file</string>
+    <string name="SSFILENAME">ss_file</string>
+    <string name="CHAMPFILENAME">champ_file</string>
+    <string name="ICONFILENAME">profile_icon_file</string>
+    <string name="passive_ability">Passive ability</string>
+    <string name="mastery_score">%1$s Mastery Score: %2$,d</string>
+    <string name="reset">Reset</string>
+    <string name="plus10">+10% CDR</string>
+    <string name="plus20">+20% CDR</string>
+    <string name="current_cdr">CDR Added: %d</string>
+    <string name="no_score">No Champion Mastery Available</string>
+    <string name="master">Master</string>
+    <string name="challenger">Challenger</string>
+    <string name="unranked">Unranked</string>
+    <string name="fire_desc">This player is on fire.</string>
+    <string name="cold_desc">This player is still warming up.</string>
+    <string name="tilted_desc">This player is currently tilted.</string>
+    <string name="points">%,d points</string>
+    <string name="about">About</string>
+    <string name="action_about">About</string>
+    <string name="copyright">LeagueDelta isn\'t endorsed by Riot Games and doesn\'t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</string>
+
+    <string-array name="regions">
+        <item>NA</item>
+        <item>EUW</item>
+        <item>EUNE</item>
+        <item>OCE</item>
+        <item>LAN</item>
+        <!-- <item>KR</item>
+        <item>BR</item>
+        <item>JP</item>
+        <item>LAS</item>
+        <item>RU</item>
+        <item>TR</item>-->
+    </string-array>
+    <string name="title_activity_view_game">ViewGame</string>
+    <string name="title_activity_matchup">Matchup</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <string name="pref_header_general">General</string>
+    <string name="preferred_region">Preferred Region</string>
+    <string name="preferred_name">Summoner Name</string>
+    <string name="title_activity_settings2">Settings</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+
+</resources>
