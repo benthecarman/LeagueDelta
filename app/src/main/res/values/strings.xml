@@ -27,7 +27,7 @@
     <string name="reset">Reset</string>
     <string name="plus10">+10% CDR</string>
     <string name="plus20">+20% CDR</string>
-    <string name="current_cdr">Current CDR: %d</string>
+    <string name="current_cdr">Added CDR: %d</string>
     <string name="no_score">No Champion Mastery Available</string>
     <string name="master">Master</string>
     <string name="challenger">Challenger</string>

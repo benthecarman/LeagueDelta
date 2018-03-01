@@ -6,12 +6,8 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import net.rithms.riot.api.ApiConfig;
-import net.rithms.riot.api.RiotApi;
-import net.rithms.riot.api.RiotApiException;
-import net.rithms.riot.constant.Platform;
-
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -22,10 +18,44 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
 class Utilities {
 
-    static List<String> getAbilityCooldowns(int champId, double flatCDR, double scalingCDR, boolean hasMast, Context context) {
+    static String getKeyStoneCD(int id) {
+        switch (id) {
+            case 8326://Unsealed Spell Book
+                return "120s";
+            case 8351://Glacial Augment
+                return "7/6/5/4 s";
+            case 8359://Kleptomancy
+                return "2 s";
+            case 8008://Lethal Tempo
+                return "6 s";
+            case 8005://Press the Attack
+                return "6 s";
+            case 8112://Electrocute
+                return "50 - 25 s";
+            case 8124://Predator
+                return "150 - 100 s";
+            case 8128:
+                return "20 / 300 s";
+            case 8214://Summon Aery
+                return "2s";
+            case 8229://Comet
+                return "20 - 8 s";
+            case 8230://Phase Dive
+                return "15 s";
+            case 8439://Aftershock
+                return "20 s";
+            case 8465://Guardian
+                return "70 - 40 s";
+            default://Others
+                return "";
+        }
+    }
+
+    static List<String> getAbilityCooldowns(int champId, int cdr, boolean hasUltHat, boolean hasCosmicInsight, boolean hasCelerity, Context context) {
         ArrayList<Byte> bytes = new ArrayList<>();
         try {
             FileInputStream fis = context.openFileInput(context.getString(R.string.CHAMPFILENAME));
@@ -58,37 +88,37 @@ class Utilities {
             break;
         }
 
-        q = adjustCD(q, flatCDR, scalingCDR, false, hasMast);
-        w = adjustCD(w, flatCDR, scalingCDR, false, hasMast);
-        e = adjustCD(e, flatCDR, scalingCDR, false, hasMast);
-        r = adjustCD(r, flatCDR, scalingCDR, true, hasMast);
+        q = adjustCD(q, hasUltHat, false, hasCosmicInsight, hasCelerity, cdr);
+        w = adjustCD(w, hasUltHat, false, hasCosmicInsight, hasCelerity, cdr);
+        e = adjustCD(e, hasUltHat, false, hasCosmicInsight, hasCelerity, cdr);
+        r = adjustCD(r, hasUltHat, true, hasCosmicInsight, hasCelerity, cdr);
 
         switch (champId) {
-            case 110:
-            case 67:
-            case 254:
+            case 110: //Varus
+            case 67: //Vayne
+            case 254: //Vi
                 w = context.getString(R.string.passive_ability);
                 break;
-            case 4:
+            case 4: //TwistedFate
                 e = context.getString(R.string.passive_ability);
                 break;
-            case 77:
-                r = adjustCD(r, flatCDR, scalingCDR, false, hasMast);
+            case 77: //Udyr
+                r = adjustCD(r, hasUltHat, false, hasCosmicInsight, hasCelerity, cdr);
                 break;
-            case 421:
-                r = adjustCD("100 80 60", flatCDR, scalingCDR, true, hasMast);
+            case 421: //Rek'Sai
+                r = adjustCD("100 80 60", hasUltHat, true, hasCosmicInsight, hasCelerity, cdr);
                 break;
-            case 91:
-                q = adjustCD("8 7.5 7 6.5 6", flatCDR, scalingCDR, false, hasMast);
+            case 91: //Talon
+                q = adjustCD("8 7.5 7 6.5 6", hasUltHat, false, hasCosmicInsight, hasCelerity, cdr);
                 e = "160/135/110/85/60 s";
                 break;
-            case 30:
+            case 30: //Karthus
                 q = "1 s";
                 break;
-            case 157:
+            case 157: //Yasuo
                 q = "4 - 1.3 s";
                 e = "10 9 8 7 6 s";
-                r = adjustCD("80 55 30", flatCDR, scalingCDR, true, hasMast);
+                r = adjustCD("80 55 30", hasUltHat, true, hasCosmicInsight, hasCelerity, cdr);
                 break;
             default:
                 break;
@@ -104,7 +134,7 @@ class Utilities {
         return cds;
     }
 
-    private static String adjustCD(String cds, double flatCDR, double scalingCDR, boolean isUlt, boolean hasMast) {
+    public static String adjustCD(String cds, boolean hasUltHat, boolean isUlt, boolean hasCosmicInsight, boolean hasCelerity, int added) {
         cds = cds.replaceAll("/", " ");
         Scanner scanner = new Scanner(cds);
         List<Double> base = new LinkedList<>();
@@ -118,14 +148,24 @@ class Utilities {
         if (isUlt && base.size() == 3)
             lvl = 6;
         for (Double d : base) {
-            double multiplier = 1 - (flatCDR + (scalingCDR * lvl));
+            double multi = added / 100.0;
 
-            if (hasMast && multiplier < .55)
-                multiplier = .55;
-            else if (!hasMast && multiplier < .60)
-                multiplier = .6;
+            if (lvl >= 10 && hasCelerity)
+                multi += .1;
+            if (hasCosmicInsight)
+                multi += .05;
+            if (isUlt && lvl >= 11 && hasUltHat)
+                multi = multi * 1.15;
 
-            d = round(d * multiplier, 0);
+            Log.d("Multi", multi + "");
+
+
+            if (multi > .45 && hasCosmicInsight)
+                multi = .45;
+            else if (multi > .4 && !hasCosmicInsight)
+                multi = .4;
+
+            d = round(d * (1 - multi), 0);
 
             if (d > 1)
                 adjusted.append("").append((int) d.doubleValue()).append("/");
@@ -155,7 +195,7 @@ class Utilities {
         return bd.doubleValue();
     }
 
-    static List<Integer> getSummonerCooldown(int id1, int id2, boolean hasCDR, Context context) {
+    static List<Integer> getSummonerCooldown(int id1, int id2, boolean hasComicInsight, boolean hasSpellBook, Context context) {
         ArrayList<Byte> bytes = new ArrayList<>();
         try {
             FileInputStream fis = context.openFileInput(context.getString(R.string.SSFILENAME));
@@ -189,10 +229,15 @@ class Utilities {
         else if (id2 == 12)
             cd2 = 300;
 
-        if (hasCDR) {
-            cd1 *= .85;
-            cd2 *= .85;
-        }
+        double multi = 1;
+
+        if (hasComicInsight)
+            multi -= 0.05;
+        if (hasSpellBook)
+            multi -= .15;
+
+        cd1 *= multi;
+        cd2 *= multi;
 
         List<Integer> list = new LinkedList<>();
         list.add((int) cd1);
@@ -236,32 +281,59 @@ class Utilities {
         return dimens;
     }*/
 
+    static Bitmap getChampIcon(String name) {
+
+        name = name.replaceAll(" ", "").replace("'", "").replace(".", "");
+
+        String url = "http://ddragon.leagueoflegends.com/cdn/" + Constants.LOL_VERSION + "/img/champion/" + name + ".png";
+
+        try {
+            return new IconLookUp().execute(url).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+
+            return null;
+        }
+    }
+
     static Bitmap getBitmapFromURL(String src) {
         try {
             java.net.URL url = new java.net.URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url
-                    .openConnection();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setDoInput(true);
             connection.connect();
             InputStream input = connection.getInputStream();
             return BitmapFactory.decodeStream(input);
+        } catch (FileNotFoundException e) {
+            int z = src.lastIndexOf('/');
+            String str = src.substring(0, z + 1);
+            String end = src.substring(z + 1).toLowerCase();
+            end = end.substring(0, 1).toUpperCase() + end.substring(1);
+            String newString = str + end;
+
+            return newString.equals(src) ? null : getBitmapFromURL(newString);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    static boolean isKeystone(int id) {
-        switch (id) {
-            case 6161:
-            case 6162:
-            case 6164:
-            case 6261:
-            case 6262:
-            case 6263:
-            case 6361:
-            case 6362:
-            case 6363:
+    static boolean isKeystone(long id) {
+        switch ((int) id) {
+            case 8230:
+            case 8229:
+            case 8359:
+            case 8112:
+            case 8021:
+            case 8465:
+            case 8008:
+            case 8214:
+            case 8124:
+            case 8128:
+            case 8326:
+            case 8005:
+            case 8439:
+            case 8437:
                 return true;
             default:
                 return false;
@@ -304,7 +376,6 @@ class Utilities {
         }
     }
 
-
     private static String champToFile(String name) {
         return name == null || name.equals("") ? "" : name.toLowerCase().replaceAll(" ", "").replaceAll("\\.", "").replaceAll("'", "");
     }
@@ -336,298 +407,17 @@ class Utilities {
             scan.close();
             scanner.close();
 
-            return wantFile? champToFile(name): name.replaceAll("([A-Z])", " $1").replaceAll("\' ","'").trim();
+            return wantFile ? champToFile(name) : name.replaceAll("([A-Z])", " $1").replaceAll("\' ", "'").trim();
         }
 
         return "";
     }
 
-  /*  static String champIdToChampName(int id, boolean wantFile)
-    {
-        if (wantFile)
-            return  champIdToChampName(id, false).toLowerCase().replaceAll(" ", "").replaceAll("\\.", "").replaceAll("'", "");
-        switch (id)
-        {
-            case 1:
-                return "Annie";
-            case 2:
-                return "Olaf";
-            case 3:
-                return "Galio";
-            case 4:
-                return "Twisted Fate";
-            case 5:
-                return "Xin Zhao";
-            case 6:
-                return "Urgot";
-            case 7:
-                return "LeBlanc";
-            case 8:
-                return "Vladimir";
-            case 9:
-                return "Fiddlesticks";
-            case 10:
-                return "Kayle";
-            case 11:
-                return "Master Yi";
-            case 12:
-                return "Alistar";
-            case 13:
-                return "Ryze";
-            case 14:
-                return "Sion";
-            case 15:
-                return "Sivir";
-            case 16:
-                return "Soraka";
-            case 17:
-                return "Teemo";
-            case 18:
-                return "Tristana";
-            case 19:
-                return "Warwick";
-            case 20:
-                return "Nunu";
-            case 21:
-                return "Miss Fortune";
-            case 22:
-                return "Ashe";
-            case 23:
-                return "Tryndamere";
-            case 24:
-                return "Jax";
-            case 25:
-                return "Morgana";
-            case 26:
-                return "Zilean";
-            case 27:
-                return "Singed";
-            case 28:
-                return "Evelynn";
-            case 29:
-                return "Twitch";
-            case 30:
-                return "Karthus";
-            case 31:
-                return "Cho'Gath";
-            case 32:
-                return "Amumu";
-            case 33:
-                return "Rammus";
-            case 34:
-                return "Anivia";
-            case 35:
-                return "Shaco";
-            case 36:
-                return "Dr. Mundo";
-            case 37:
-                return "Sona";
-            case 38:
-                return "Kassadin";
-            case 39:
-                return "Irelia";
-            case 40:
-                return "Janna";
-            case 41:
-                return "Gangplank";
-            case 42:
-                return "Corki";
-            case 43:
-                return "Karma";
-            case 44:
-                return "Taric";
-            case 45:
-                return "Veigar";
-            case 48:
-                return "Trundle";
-            case 50:
-                return "Swain";
-            case 51:
-                return "Caitlyn";
-            case 53:
-                return "Blitzcrank";
-            case 54:
-                return "Malphite";
-            case 55:
-                return "Katarina";
-            case 56:
-                return "Nocturne";
-            case 57:
-                return "Maokai";
-            case 58:
-                return "Renekton";
-            case 59:
-                return "Jarvan IV";
-            case 60:
-                return "Elise";
-            case 61:
-                return "Orianna";
-            case 62:
-                return "Wukong";
-            case 63:
-                return "Brand";
-            case 64:
-                return "Lee Sin";
-            case 67:
-                return "Vayne";
-            case 68:
-                return "Rumble";
-            case 69:
-                return "Cassiopeia";
-            case 72:
-                return "Skarner";
-            case 74:
-                return "Heimerdinger";
-            case 75:
-                return "Nasus";
-            case 76:
-                return "Nidalee";
-            case 77:
-                return "Udyr";
-            case 78:
-                return "Poppy";
-            case 79:
-                return "Gragas";
-            case 80:
-                return "Pantheon";
-            case 81:
-                return "Ezreal";
-            case 82:
-                return "Mordekaiser";
-            case 83:
-                return "Yorick";
-            case 84:
-                return "Akali";
-            case 85:
-                return "Kennen";
-            case 86:
-                return "Garen";
-            case 89:
-                return "Leona";
-            case 90:
-                return "Malzahar";
-            case 91:
-                return "Talon";
-            case 92:
-                return "Riven";
-            case 96:
-                return "Kog'Maw";
-            case 98:
-                return "Shen";
-            case 99:
-                return "Lux";
-            case 101:
-                return "Xerath";
-            case 102:
-                return "Shyvana";
-            case 103:
-                return "Ahri";
-            case 104:
-                return "Graves";
-            case 105:
-                return "Fizz";
-            case 106:
-                return "Volibear";
-            case 107:
-                return "Rengar";
-            case 110:
-                return "Varus";
-            case 111:
-                return "Nautilus";
-            case 112:
-                return "Viktor";
-            case 113:
-                return "Sejuani";
-            case 114:
-                return "Fiora";
-            case 115:
-                return "Ziggs";
-            case 117:
-                return "Lulu";
-            case 119:
-                return "Draven";
-            case 120:
-                return "Hecarim";
-            case 121:
-                return "Kha'Zix";
-            case 122:
-                return "Darius";
-            case 126:
-                return "Jayce";
-            case 127:
-                return "Lissandra";
-            case 131:
-                return "Diana";
-            case 133:
-                return "Quinn";
-            case 134:
-                return "Syndra";
-            case 136:
-                return "Aurelion Sol";
-            case 141:
-                return "Kayn";
-            case 142:
-                return "Zoe";
-            case 143:
-                return "Zyra";
-            case 150:
-                return "Gnar";
-            case 154:
-                return "Zac";
-            case 157:
-                return "Yasuo";
-            case 161:
-                return "Vel'Koz";
-            case 163:
-                return "Taliyah";
-            case 164:
-                return "Camille";
-            case 201:
-                return "Braum";
-            case 202:
-                return "Jhin";
-            case 203:
-                return "Kindred";
-            case 222:
-                return "Jinx";
-            case 223:
-                return "Tahm Kench";
-            case 236:
-                return "Lucian";
-            case 238:
-                return "Zed";
-            case 240:
-                return "Kled";
-            case 245:
-                return "Ekko";
-            case 254:
-                return "Vi";
-            case 266:
-                return "Aatrox";
-            case 267:
-                return "Nami";
-            case 268:
-                return "Azir";
-            case 412:
-                return "Thresh";
-            case 420:
-                return "Illaoi";
-            case 421:
-                return "Rek'Sai";
-            case 427:
-                return "Ivern";
-            case 429:
-                return "Kalista";
-            case 432:
-                return "Bard";
-            case 497:
-                return "Rakan";
-            case 498:
-                return "Xayah";
-            case 516:
-                return "Ornn";
-            default:
-                return "Invalid";
+    private static class IconLookUp extends AsyncTask<String, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            return getBitmapFromURL(strings[0]);
         }
-    }*/
+    }
 }

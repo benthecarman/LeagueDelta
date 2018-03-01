@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -41,6 +42,9 @@ public class Matchup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matchup);
+
+        if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("Night Mode", false))
+            findViewById(R.id.base1).setBackground(getDrawable(R.drawable.bgd));
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -103,50 +107,38 @@ public class Matchup extends AppCompatActivity {
             ChampionMatchup matchup = (ChampionMatchup) getActivity().getIntent().getSerializableExtra("x");
             int cdr = getArguments().getInt("cdr");
 
-            String champ = Utilities.champIdToChampName(matchup.enemyChampId, false,getContext());
-            String fileChamp = Utilities.champIdToChampName(matchup.enemyChampId, true,getContext());
+            if(PreferenceManager.getDefaultSharedPreferences(rootView.getContext()).getBoolean("Night Mode", false))
+                rootView.findViewById(R.id.base3).setBackground(rootView.getContext().getDrawable(R.drawable.bgd));
+
+            String champ = Utilities.champIdToChampName(matchup.enemyChampId, false, getContext());
+            String fileChamp = Utilities.champIdToChampName(matchup.enemyChampId, true, getContext());
 
             ImageView opponent = rootView.findViewById(R.id.opponent);
             Context c = rootView.getContext();
-            int opponentImageId = c.getResources().getIdentifier(fileChamp, "drawable", c.getPackageName());
-            opponent.setImageDrawable(ContextCompat.getDrawable(this.getContext(), opponentImageId));
+            Bitmap bitmap = Utilities.getChampIcon(champ);
+            if (bitmap != null)
+                opponent.setImageBitmap(bitmap);
+            else {
+                int imageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
+                opponent.setImageDrawable(getActivity().getDrawable(imageId));
+            }
 
             TextView champ_name = rootView.findViewById(R.id.champ_name);
             champ_name.setText(champ);
             champ_name.setAllCaps(false);
 
             int keyStoneID = 0;
-            boolean hasSumCDR = false;
-            double cdrFlat = cdr / 100.0;
-            double cdrScaling = 0.0;
-            boolean hasMast = false;
+            boolean hasUltHat =  matchup.perks.getPerkIds().contains(8243L);
+            boolean hasSpellBook =  matchup.perks.getPerkIds().contains(8326L);
+            boolean hasCosmicInsight =  matchup.perks.getPerkIds().contains(8347L);
+            boolean hasCelerity =  matchup.perks.getPerkIds().contains(8234L);
 
-            for(long l :matchup.perks.getPerkIds()){
-                keyStoneID++;
-            }
+            for (long l : matchup.perks.getPerkIds())
+                if (Utilities.isKeystone(l))
+                    keyStoneID = (int) l;
 
-            /*
-            for (Mastery m:matchup.masteries)
-            {
-                if(m.getMasteryId() == 6241)
-                    hasSumCDR = true;
-                if(m.getMasteryId() == 6352)
-                    hasMast = true;
-                if (Utilities.isKeystone(m.getMasteryId()))
-                    keyStoneID = m.getMasteryId();
-            }
 
-            if(hasMast)
-                cdrFlat += .05;
-
-            for (Rune r:matchup.runes)
-            {
-                int id = r.getRuneId();
-                cdrFlat += (Utilities.getRuneFlatCDR(id)*10);
-                cdrScaling += (Utilities.getRuneScalingCDR(id)*10);
-            } */
-
-            List<String> abilityCooldowns = Utilities.getAbilityCooldowns(matchup.enemyChampId, cdrFlat, cdrScaling, hasMast, c);
+            List<String> abilityCooldowns = Utilities.getAbilityCooldowns(matchup.enemyChampId, cdr, hasUltHat, hasCosmicInsight, hasCelerity, c);
 
             TextView currentCDR = rootView.findViewById(R.id.current_cdr);
             currentCDR.setText(getString(R.string.current_cdr, cdr));
@@ -175,7 +167,7 @@ public class Matchup extends AppCompatActivity {
             TextView rLabel = rootView.findViewById(R.id.r_label);
             rLabel.setText(abilityCooldowns.get(3));
 
-            List<Integer> cds = Utilities.getSummonerCooldown(matchup.spell1, matchup.spell2, hasSumCDR, c);
+            List<Integer> cds = Utilities.getSummonerCooldown(matchup.spell1, matchup.spell2, hasCosmicInsight, hasSpellBook, c);
 
             TextView ss1_icon = rootView.findViewById(R.id.ss1_cd);
             int ss1ImageId = c.getResources().getIdentifier(Utilities.summonerSpellIdToName(matchup.spell1, true), "drawable", c.getPackageName());
@@ -191,12 +183,15 @@ public class Matchup extends AppCompatActivity {
             ss2_icon.setCompoundDrawables(null, d2, null, null);
             ss2_icon.setText("" + cds.get(1) + " s");
 
-            /*TextView keystone_icon = rootView.findViewById(R.id.keystone_icon);
-            int keystoneImageId = c.getResources().getIdentifier("i" + keyStoneID, "drawable", c.getPackageName());
-            Drawable d3 = ContextCompat.getDrawable(this.getContext(), keystoneImageId);
-            d3.setBounds(0, 0, 180, 180);
-            keystone_icon.setCompoundDrawables(null, d3, null, null);
-           // keystone_icon.setText(Utilities.getKeyStoneCooldown(keyStoneID));*/
+            if(keyStoneID != 0) {
+                TextView keystone_icon = rootView.findViewById(R.id.keystone_icon);
+                int keystoneImageId = c.getResources().getIdentifier("r" + keyStoneID, "drawable", c.getPackageName());
+                Drawable d3 = ContextCompat.getDrawable(this.getContext(), keystoneImageId);
+                d3.setBounds(0, 0, 180, 180);
+                keystone_icon.setCompoundDrawables(null, d3, null, null);
+                keystone_icon.setText(Utilities.getKeyStoneCD(keyStoneID));
+            }
+
 
             Button plus10 = rootView.findViewById(R.id.cdr10);
             plus10.setOnClickListener((View v) ->
@@ -240,35 +235,28 @@ public class Matchup extends AppCompatActivity {
     }
 
 
-    /**
-     * public static class R_And_MFragment extends Fragment
-     * {
-     * private static final String ARG_SECTION_NUMBER = "section_number";
-     * <p>
-     * public R_And_MFragment()
-     * {
-     * <p>
-     * }
-     * <p>
-     * public static R_And_MFragment newInstance(int sectionNumber)
-     * {
-     * R_And_MFragment fragment = new R_And_MFragment();
-     * Bundle args = new Bundle();
-     * args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-     * fragment.setArguments(args);
-     * return fragment;
-     * }
-     * <p>
-     * Override
-     * public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-     * {
-     * View rootView = inflater.inflate(R.layout.fragment_r_and_m, container, false);
-     * ChampionMatchup matchup = (ChampionMatchup) getActivity().getIntent().getSerializableExtra("x");
-     * <p>
-     * return rootView;
-     * }
-     * }
-     *///Runes and Masteries Fragment
+    public static class R_And_MFragment extends Fragment { //Runes Fragment
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public R_And_MFragment() { //TODO
+
+        }
+
+         public static R_And_MFragment newInstance(int sectionNumber) {
+            R_And_MFragment fragment = new R_And_MFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+         }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_runes, container, false);
+            ChampionMatchup matchup = (ChampionMatchup) getActivity().getIntent().getSerializableExtra("x");
+            return rootView;
+        }
+    }
 
     public static class SummonerFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
@@ -298,6 +286,8 @@ public class Matchup extends AppCompatActivity {
 
         @Override
         public void onViewCreated(View rootView, Bundle savedInstanceState) {
+            if(PreferenceManager.getDefaultSharedPreferences(rootView.getContext()).getBoolean("Night Mode", false))
+                rootView.findViewById(R.id.base4).setBackground(rootView.getContext().getDrawable(R.drawable.bgd));
         }
 
         private void postMethod() {
@@ -334,7 +324,7 @@ public class Matchup extends AppCompatActivity {
                 masteryRank.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier("mastery" + current.getChampionLevel(), "drawable", root.getContext().getPackageName())));
                 masteryScore.setText(getString(R.string.mastery_score, Utilities.champIdToChampName(matchup.enemyChampId, false, getContext()), current.getChampionPoints()));
             } else {
-                masteryRank.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier(Utilities.champIdToChampName(matchup.enemyChampId, true,getContext()), "drawable", root.getContext().getPackageName())));
+                masteryRank.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier(Utilities.champIdToChampName(matchup.enemyChampId, true, getContext()), "drawable", root.getContext().getPackageName())));
                 masteryScore.setText(getString(R.string.no_score));
             }
 
@@ -446,13 +436,6 @@ public class Matchup extends AppCompatActivity {
                 Summoner summoner;
                 Bitmap icon;
                 List<Match> matchList = new LinkedList<>();
-                String champName;
-
-                try{
-                    champName = api.getDataChampion(matchup.platform, matchup.champId).getName();
-                }catch (Exception ignored){
-                    champName = "";
-                }
 
                 try {
                     mastery = api.getChampionMasteriesBySummoner(matchup.platform, matchup.enemySummonerId);
@@ -511,16 +494,14 @@ public class Matchup extends AppCompatActivity {
         public Fragment getItem(int position) {
             if (position == 0)
                 return Matchup.MatchupFragment.newInstance(position + 1, 0);
-            /*if (position == 1)
-                return Matchup.R_And_MFragment.newInstance(position + 1);*/
+            if (position == 1)
+                return Matchup.R_And_MFragment.newInstance(position + 1);
             return Matchup.SummonerFragment.newInstance(position + 1);
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            //return 3;
-            return 2;
+            return 3;
         }
 
         @Override
@@ -534,9 +515,9 @@ public class Matchup extends AppCompatActivity {
             switch (position) {
                 case 0:
                     return "Matchup";
-               /* case 1:
-                    return "Runes & Masteries";*/
                 case 1:
+                    return "Runes";
+                case 2:
                     return "Summoner Info";
             }
             return null;

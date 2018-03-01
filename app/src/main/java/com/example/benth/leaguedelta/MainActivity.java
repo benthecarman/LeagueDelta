@@ -65,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
         String defaultName = sharedPref.getString("summoner_name", "");
         String defaultRegion = sharedPref.getString("preferred_region", "NA");
 
+        if(sharedPref.getBoolean("Night Mode", false))
+            findViewById(R.id.base).setBackground(getDrawable(R.drawable.bgd));
+
         if (!defaultName.equals(""))
             editText.setText(defaultName);
 

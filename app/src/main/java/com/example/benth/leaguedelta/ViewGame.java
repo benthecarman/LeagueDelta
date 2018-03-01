@@ -2,7 +2,10 @@ package com.example.benth.leaguedelta;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +26,9 @@ public class ViewGame extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_game);
+
+        if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("Night Mode", false))
+            findViewById(R.id.base2).setBackground(getDrawable(R.drawable.bgd));
 
         Intent i = getIntent();
         Search search = (Search)i.getSerializableExtra("data");
@@ -45,12 +51,18 @@ public class ViewGame extends AppCompatActivity
         int imageId;
         long id = search.summoner.getAccountId();
         Context c;
+        Bitmap bitmap;
 
         im = findViewById(R.id.opponent0);
-        champ = Utilities.champIdToChampName(enemies.get(0).getChampionId(),true,getApplicationContext());
+        champ = Utilities.champIdToChampName(enemies.get(0).getChampionId(),false,getApplicationContext());
         c = im.getContext();
-        imageId = c.getResources().getIdentifier(champ, "drawable", c.getPackageName());
-        im.setImageDrawable(getDrawable(imageId));
+        bitmap = Utilities.getChampIcon(champ);
+        if(bitmap != null)
+            im.setImageBitmap(bitmap);
+        else {
+            imageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
+            im.setImageDrawable(getDrawable(imageId));
+        }
         im.setOnClickListener((View v) ->
         {
             Intent in = new Intent(this, Matchup.class);
@@ -60,10 +72,15 @@ public class ViewGame extends AppCompatActivity
         });
 
         im = findViewById(R.id.opponent1);
-        champ = Utilities.champIdToChampName(enemies.get(1).getChampionId(),true,getApplicationContext());
+        champ = Utilities.champIdToChampName(enemies.get(1).getChampionId(),false,getApplicationContext());
         c = im.getContext();
-        imageId = c.getResources().getIdentifier(champ, "drawable", c.getPackageName());
-        im.setImageDrawable(getDrawable(imageId));
+        bitmap = Utilities.getChampIcon(champ);
+        if(bitmap != null)
+            im.setImageBitmap(bitmap);
+        else {
+            imageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
+            im.setImageDrawable(getDrawable(imageId));
+        }
         im.setOnClickListener((View v) ->
         {
             Intent in = new Intent(this, Matchup.class);
@@ -73,10 +90,15 @@ public class ViewGame extends AppCompatActivity
         });
 
         im = findViewById(R.id.opponent2);
-        champ = Utilities.champIdToChampName(enemies.get(2).getChampionId(),true,getApplicationContext());
+        champ = Utilities.champIdToChampName(enemies.get(2).getChampionId(),false,getApplicationContext());
         c = im.getContext();
-        imageId = c.getResources().getIdentifier(champ, "drawable", c.getPackageName());
-        im.setImageDrawable(getDrawable(imageId));
+        bitmap = Utilities.getChampIcon(champ);
+        if(bitmap != null)
+            im.setImageBitmap(bitmap);
+        else {
+            imageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
+            im.setImageDrawable(getDrawable(imageId));
+        }
         im.setOnClickListener((View v) ->
         {
             Intent in = new Intent(this, Matchup.class);
@@ -86,10 +108,15 @@ public class ViewGame extends AppCompatActivity
         });
 
         im = findViewById(R.id.opponent3);
-        champ = Utilities.champIdToChampName(enemies.get(3).getChampionId(),true,getApplicationContext());
+        champ = Utilities.champIdToChampName(enemies.get(3).getChampionId(),false,getApplicationContext());
         c = im.getContext();
-        imageId = c.getResources().getIdentifier(champ, "drawable", c.getPackageName());
-        im.setImageDrawable(getDrawable(imageId));
+        bitmap = Utilities.getChampIcon(champ);
+        if(bitmap != null)
+            im.setImageBitmap(bitmap);
+        else {
+            imageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
+            im.setImageDrawable(getDrawable(imageId));
+        }
         im.setOnClickListener((View v) ->
         {
             Intent in = new Intent(this, Matchup.class);
@@ -100,10 +127,15 @@ public class ViewGame extends AppCompatActivity
 
 
         im = findViewById(R.id.opponent4);
-        champ = Utilities.champIdToChampName(enemies.get(4).getChampionId(),true,getApplicationContext());
+        champ = Utilities.champIdToChampName(enemies.get(4).getChampionId(),false,getApplicationContext());
         c = im.getContext();
-        imageId = c.getResources().getIdentifier(champ, "drawable", c.getPackageName());
-        im.setImageDrawable(getDrawable(imageId));
+        bitmap = Utilities.getChampIcon(champ);
+        if(bitmap != null)
+            im.setImageBitmap(bitmap);
+        else {
+            imageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
+            im.setImageDrawable(getDrawable(imageId));
+        }
         im.setOnClickListener((View v) ->
         {
             Intent in = new Intent(this, Matchup.class);

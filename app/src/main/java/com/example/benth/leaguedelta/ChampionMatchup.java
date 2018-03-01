@@ -5,7 +5,6 @@ import net.rithms.riot.api.endpoints.spectator.dto.Perks;
 import net.rithms.riot.constant.Platform;
 
 import java.io.Serializable;
-import java.util.List;
 
 class ChampionMatchup implements Serializable
 {
