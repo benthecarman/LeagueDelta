@@ -1,5 +1,6 @@
 package com.example.benth.leaguedelta;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -21,27 +22,30 @@ public class About extends AppCompatActivity {
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean nightMode = sharedPref.getBoolean("Night Mode", false);
-
         simulateDayNight(nightMode ? 1 : 0);
+
+        Element e = new Element();
+        e.setIconDrawable(R.drawable.porosmooch);
+        e.setAutoApplyIconTint(false);
+        e.setTitle("Help keep us ad-free");
+        e.setIntent(new Intent(this, DonationPage.class));
 
         View aboutPage = new AboutPage(this)
                 .isRTL(false)
-                .setImage(R.drawable.jinx)
+                .setImage(R.drawable.porosmile)
                 .setDescription("Check us out!")
                 .addItem(new Element().setTitle("Version " + getString(R.string.version)))
                 .addGroup("Connect with the dev")
                 .addTwitter("benthecarman", "Follow him on Twitter")
                 .addGitHub("benthecarman", "Fork him on GitHub")
+                .addItem(e)
                 .addItem(new Element().setTitle(getString(R.string.copyright)))
                 .create();
 
         setContentView(aboutPage);
     }
 
-    private Element element() {
-
-        return null;
-    }
+    //TODO Donation page
 
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();

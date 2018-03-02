@@ -101,16 +101,6 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
                 break;
         }
 
-        /*
-        FileOutputStream fos;
-        try {
-            fos = openFileOutput(getString(R.string.VERSIONFILENAME), Context.MODE_PRIVATE);
-            fos.write("update".getBytes());
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
         ArrayList<Byte> bytes = new ArrayList<>();
         FileInputStream fis;
         try {

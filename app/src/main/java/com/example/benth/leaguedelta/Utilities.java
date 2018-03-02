@@ -350,6 +350,9 @@ class Utilities {
 
         name = name.replaceAll(" ", "").replace("'", "").replace(".", "");
 
+        if (name.equalsIgnoreCase("wukong"))
+            name = "MonkeyKing";
+
         String url = "http://ddragon.leagueoflegends.com/cdn/" + Constants.LOL_VERSION + "/img/champion/" + name + ".png";
 
         try {

@@ -51,5 +51,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.benth.leaguedelta.MainActivity" />
         </activity>
+        <activity android:name=".DonationPage"></activity>
     </application>
+
 </manifest>
