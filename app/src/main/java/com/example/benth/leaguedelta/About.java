@@ -45,14 +45,10 @@ public class About extends AppCompatActivity {
         setContentView(aboutPage);
     }
 
-    //TODO Donation page
-
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            // Show the Up button in the action bar.
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        if (actionBar != null)
+            actionBar.setDisplayHomeAsUpEnabled(true); //Show the Up button in the action bar.
     }
 
     private void simulateDayNight(int currentSetting) {

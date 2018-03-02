@@ -36,6 +36,7 @@
     <string name="action_about">About</string>
     <string name="crypto">Donate crypto to any of my following addresses!</string>
     <string name="ty">Thank you!</string>
+    <string name="donate">Donate</string>
     <string name="copyright">&appname; isn\'t endorsed by Riot Games and doesn\'t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</string>
 
     <string-array name="regions">

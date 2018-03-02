@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
 
@@ -81,6 +82,10 @@ public class DonationPage extends AppCompatActivity {
             Toast.makeText(DonationPage.this, "Copied to clipboard", Toast.LENGTH_SHORT).show();
         });
 
+        Element ty = new Element();
+        ty.setGravity(Gravity.CENTER_HORIZONTAL);
+        ty.setTitle(getString(R.string.ty).toUpperCase());
+
         View aboutPage = new AboutPage(this)
                 .isRTL(false)
                 .setDescription(getString(R.string.crypto))
@@ -88,16 +93,15 @@ public class DonationPage extends AppCompatActivity {
                 .addItem(eth)
                 .addItem(ltc)
                 .addItem(nano)
+                .addItem(ty)
                 .create();
         setContentView(aboutPage);
     }
 
-    private void setupActionBar() { //TODO Back button
+    private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            // Show the Up button in the action bar.
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        if (actionBar != null)
+            actionBar.setDisplayHomeAsUpEnabled(true); //Show the Up button in the action bar.
     }
 
     private void simulateDayNight(int currentSetting) {
