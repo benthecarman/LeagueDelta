@@ -23,6 +23,7 @@ import net.rithms.riot.api.ApiConfig;
 import net.rithms.riot.api.RiotApi;
 import net.rithms.riot.api.RiotApiException;
 import net.rithms.riot.api.endpoints.spectator.dto.CurrentGameInfo;
+import net.rithms.riot.api.endpoints.spectator.dto.FeaturedGameInfo;
 import net.rithms.riot.api.endpoints.static_data.constant.ChampionListTags;
 import net.rithms.riot.api.endpoints.static_data.constant.Locale;
 import net.rithms.riot.api.endpoints.static_data.constant.SpellListTags;
@@ -39,10 +40,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements OnItemSelectedListener {
 
+    private final boolean TESTING = false;
     public EditText editText;
     public TextView text;
     public Search search;
@@ -219,31 +222,31 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
             CurrentGameInfo cgi;
 
             try {
-                sum = api.getSummonerByName(platform, params[0].replaceAll("\\s+", "").toLowerCase());
+                if (!TESTING) {
+                    sum = api.getSummonerByName(platform, params[0].replaceAll("\\s+", "").toLowerCase());
+                } else {
 
-                //FIXME for real use
-                /*I am for testing <
-                List<FeaturedGameInfo> gameInfoList = api.getFeaturedGames(platform).getGameList();
-                int i = -1;
-                for (FeaturedGameInfo f : gameInfoList) {
-                    if (f.getMapId() == 11) {
-                        i++;
-                        break;
-                    }
-                    i++;
-                }
-                if (i == -1) {
+                    List<FeaturedGameInfo> gameInfoList = api.getFeaturedGames(platform).getGameList();
+                    int i = -1;
                     for (FeaturedGameInfo f : gameInfoList) {
-                        if (f.getParticipants().size() == 10) {
+                        if (f.getMapId() == 11) {
                             i++;
                             break;
                         }
                         i++;
                     }
-                }
+                    if (i == -1) {
+                        for (FeaturedGameInfo f : gameInfoList) {
+                            if (f.getParticipants().size() == 10) {
+                                i++;
+                                break;
+                            }
+                            i++;
+                        }
+                    }
 
-                sum = api.getSummonerByName(platform, gameInfoList.get(i).getParticipants().get(0).getSummonerName());
-                //I am for testing >*/
+                    sum = api.getSummonerByName(platform, gameInfoList.get(i).getParticipants().get(0).getSummonerName());
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
