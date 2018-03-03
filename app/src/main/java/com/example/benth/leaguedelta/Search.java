@@ -9,29 +9,25 @@ import net.rithms.riot.constant.Platform;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-class Search implements Serializable
-{
+class Search implements Serializable {
     Summoner summoner;
     CurrentGameInfo currentGameInfo;
     Platform platform;
 
-    Search(Search s)
-    {
+    Search(Search s) {
         this.summoner = s.summoner;
         this.currentGameInfo = s.currentGameInfo;
         this.platform = s.platform;
     }
 
-    Search(Summoner sum, @Nullable CurrentGameInfo cgi, Platform p)
-    {
+    Search(Summoner sum, @Nullable CurrentGameInfo cgi, Platform p) {
         this.summoner = sum;
         this.currentGameInfo = cgi;
         this.platform = p;
     }
 
     @Override
-    public String toString()
-    {
-        return summoner.getName()+ " "+ currentGameInfo.getGameMode()+" "+platform.toString();
+    public String toString() {
+        return summoner.getName() + " " + currentGameInfo.getGameMode() + " " + platform.toString();
     }
 }

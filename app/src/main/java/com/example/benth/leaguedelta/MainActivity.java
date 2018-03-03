@@ -23,7 +23,6 @@ import net.rithms.riot.api.ApiConfig;
 import net.rithms.riot.api.RiotApi;
 import net.rithms.riot.api.RiotApiException;
 import net.rithms.riot.api.endpoints.spectator.dto.CurrentGameInfo;
-import net.rithms.riot.api.endpoints.spectator.dto.FeaturedGameInfo;
 import net.rithms.riot.api.endpoints.static_data.constant.ChampionListTags;
 import net.rithms.riot.api.endpoints.static_data.constant.Locale;
 import net.rithms.riot.api.endpoints.static_data.constant.SpellListTags;
@@ -40,7 +39,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements OnItemSelectedListener {
@@ -64,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
         String defaultName = sharedPref.getString("summoner_name", "");
         String defaultRegion = sharedPref.getString("preferred_region", "NA");
 
-        if(sharedPref.getBoolean("Night Mode", false))
+        if (sharedPref.getBoolean("Night Mode", false))
             findViewById(R.id.base).setBackground(getDrawable(R.drawable.bgd));
 
         if (!defaultName.equals(""))
@@ -118,9 +116,7 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
 
         Constants.LOL_VERSION = currentVersion = new String(b, StandardCharsets.UTF_8);
 
-        text.setText(currentVersion);
-
-        //new SummonerLookup().execute("d");
+        new SummonerLookup().execute("wow ben is the coolest guy ever420");
 
         findViewById(R.id.search_button).setOnClickListener((View v) -> search());
 
@@ -139,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
         } else if (search.currentGameInfo == null) {
             text.setText(getString(R.string.notInGame));
         } else {
-            text.setText(PreferenceManager.getDefaultSharedPreferences(this).getString("summoner_name", ""));
+            text.setText("");
             Intent intent = new Intent(this, ViewGame.class);
             intent.putExtra("data", search);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -184,11 +180,16 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
 
     @SuppressLint("StaticFieldLeak")
     private class SummonerLookup extends AsyncTask<String, Void, Search> {
+
+        String name;
+
         @Override
         protected Search doInBackground(String... params) {
-            ApiConfig config = new ApiConfig().setKey(Constants.API_KEY).setRateLimitHandler(null);
+            ApiConfig config = new ApiConfig().setKey(Constants.API_KEY);
             RiotApi api = new RiotApi(config);
             //RiotApiAsync apiAsync = api.getAsyncApi();
+
+            name = params[0];
 
             Platform platform;
 
@@ -218,10 +219,10 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
             CurrentGameInfo cgi;
 
             try {
-                //String name = api.getSummonerByName(platform, params[0].replaceAll("\\s+", "").toLowerCase());
-                //FIXME for real use
+                sum = api.getSummonerByName(platform, params[0].replaceAll("\\s+", "").toLowerCase());
 
-                //I am for testing <
+                //FIXME for real use
+                /*I am for testing <
                 List<FeaturedGameInfo> gameInfoList = api.getFeaturedGames(platform).getGameList();
                 int i = -1;
                 for (FeaturedGameInfo f : gameInfoList) {
@@ -239,10 +240,10 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
                         }
                         i++;
                     }
-                }//I am for testing >
+                }
 
                 sum = api.getSummonerByName(platform, gameInfoList.get(i).getParticipants().get(0).getSummonerName());
-
+                //I am for testing >*/
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -280,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
                     Map<String, Champion> championMap = championList.getData();
                     StringBuilder champs = new StringBuilder();
                     for (Champion champion : championMap.values()) {
-                        champs.append("").append(champion.getId()).append(" ").append(champion.getName().replace(" ",""));
+                        champs.append("").append(champion.getId()).append(" ").append(champion.getName().replace(" ", ""));
                         for (ChampionSpell spell : champion.getSpells())
                             champs.append(" ").append(spell.getCooldownBurn());
                         champs.append("\n");
@@ -311,28 +312,11 @@ public class MainActivity extends AppCompatActivity implements OnItemSelectedLis
         @Override
         protected void onPostExecute(Search s) {
             super.onPostExecute(s);
-            /*
-            ArrayList<Byte> bytes = new ArrayList<>();
-            FileInputStream fis;
-            try {
-                fis = openFileInput(getString(R.string.SSFILENAME));
-                while (fis.available()>0)
-                    bytes.add((byte) fis.read());
-                fis.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            byte[] b = new byte[bytes.size()];
-            for(int z = 0;z<bytes.size();++z)
-                b[z] = bytes.get(z);
-
-            text.setText(new String(b, StandardCharsets.UTF_8));
-            */
             if (s != null)
                 search = new Search(s);
-            else
+            else if (!name.equals("wow ben is the coolest guy ever420")) {
                 text.setText(getString(R.string.error));
+            }
         }
     }
 }

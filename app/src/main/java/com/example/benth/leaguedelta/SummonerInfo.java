@@ -11,8 +11,7 @@ import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
 
 import java.util.List;
 
-class SummonerInfo
-{
+class SummonerInfo {
     LeaguePosition rank;
     List<ChampionMastery> mastery;
     Summoner summoner;

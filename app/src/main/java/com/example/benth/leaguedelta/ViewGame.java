@@ -17,19 +17,17 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 
-public class ViewGame extends AppCompatActivity
-{
+public class ViewGame extends AppCompatActivity {
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_game);
 
-        if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("Night Mode", false))
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("Night Mode", false))
             findViewById(R.id.base2).setBackground(getDrawable(R.drawable.bgd));
 
         Intent i = getIntent();
-        Search search = (Search)i.getSerializableExtra("data");
+        Search search = (Search) i.getSerializableExtra("data");
 
         List<CurrentGameParticipant> all = search.currentGameInfo.getParticipants();
         List<CurrentGameParticipant> enemies = new LinkedList<>();
@@ -55,7 +53,7 @@ public class ViewGame extends AppCompatActivity
         champ = Utilities.champIdToChampName(enemies.get(0).getChampionId(), getApplicationContext());
         c = im.getContext();
         bitmap = Utilities.getChampIcon(champ);
-        if(bitmap != null)
+        if (bitmap != null)
             im.setImageBitmap(bitmap);
         else {
             imageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
@@ -64,7 +62,7 @@ public class ViewGame extends AppCompatActivity
         im.setOnClickListener((View v) ->
         {
             Intent in = new Intent(this, Matchup.class);
-            in.putExtra("x", new ChampionMatchup(id,champId, enemies.get(0),search.platform,search.currentGameInfo.getGameQueueConfigId()));
+            in.putExtra("x", new ChampionMatchup(id, champId, enemies.get(0), search.platform, search.currentGameInfo.getGameQueueConfigId()));
             in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(in);
         });
@@ -73,7 +71,7 @@ public class ViewGame extends AppCompatActivity
         champ = Utilities.champIdToChampName(enemies.get(1).getChampionId(), getApplicationContext());
         c = im.getContext();
         bitmap = Utilities.getChampIcon(champ);
-        if(bitmap != null)
+        if (bitmap != null)
             im.setImageBitmap(bitmap);
         else {
             imageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
@@ -82,7 +80,7 @@ public class ViewGame extends AppCompatActivity
         im.setOnClickListener((View v) ->
         {
             Intent in = new Intent(this, Matchup.class);
-            in.putExtra("x", new ChampionMatchup(id,champId, enemies.get(1),search.platform,search.currentGameInfo.getGameQueueConfigId()));
+            in.putExtra("x", new ChampionMatchup(id, champId, enemies.get(1), search.platform, search.currentGameInfo.getGameQueueConfigId()));
             in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(in);
         });
@@ -91,7 +89,7 @@ public class ViewGame extends AppCompatActivity
         champ = Utilities.champIdToChampName(enemies.get(2).getChampionId(), getApplicationContext());
         c = im.getContext();
         bitmap = Utilities.getChampIcon(champ);
-        if(bitmap != null)
+        if (bitmap != null)
             im.setImageBitmap(bitmap);
         else {
             imageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
@@ -100,7 +98,7 @@ public class ViewGame extends AppCompatActivity
         im.setOnClickListener((View v) ->
         {
             Intent in = new Intent(this, Matchup.class);
-            in.putExtra("x", new ChampionMatchup(id,champId, enemies.get(2),search.platform,search.currentGameInfo.getGameQueueConfigId()));
+            in.putExtra("x", new ChampionMatchup(id, champId, enemies.get(2), search.platform, search.currentGameInfo.getGameQueueConfigId()));
             in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(in);
         });
@@ -109,7 +107,7 @@ public class ViewGame extends AppCompatActivity
         champ = Utilities.champIdToChampName(enemies.get(3).getChampionId(), getApplicationContext());
         c = im.getContext();
         bitmap = Utilities.getChampIcon(champ);
-        if(bitmap != null)
+        if (bitmap != null)
             im.setImageBitmap(bitmap);
         else {
             imageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
@@ -118,7 +116,7 @@ public class ViewGame extends AppCompatActivity
         im.setOnClickListener((View v) ->
         {
             Intent in = new Intent(this, Matchup.class);
-            in.putExtra("x", new ChampionMatchup(id,champId, enemies.get(3),search.platform, search.currentGameInfo.getGameQueueConfigId()));
+            in.putExtra("x", new ChampionMatchup(id, champId, enemies.get(3), search.platform, search.currentGameInfo.getGameQueueConfigId()));
             in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(in);
         });
@@ -128,7 +126,7 @@ public class ViewGame extends AppCompatActivity
         champ = Utilities.champIdToChampName(enemies.get(4).getChampionId(), getApplicationContext());
         c = im.getContext();
         bitmap = Utilities.getChampIcon(champ);
-        if(bitmap != null)
+        if (bitmap != null)
             im.setImageBitmap(bitmap);
         else {
             imageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
@@ -137,7 +135,7 @@ public class ViewGame extends AppCompatActivity
         im.setOnClickListener((View v) ->
         {
             Intent in = new Intent(this, Matchup.class);
-            in.putExtra("x", new ChampionMatchup(id,champId, enemies.get(4),search.platform,search.currentGameInfo.getGameQueueConfigId()));
+            in.putExtra("x", new ChampionMatchup(id, champId, enemies.get(4), search.platform, search.currentGameInfo.getGameQueueConfigId()));
             in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(in);
         });

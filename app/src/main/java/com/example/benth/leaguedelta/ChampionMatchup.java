@@ -6,16 +6,14 @@ import net.rithms.riot.constant.Platform;
 
 import java.io.Serializable;
 
-class ChampionMatchup implements Serializable
-{
-    int enemyChampId, champId, spell1, spell2,queueID;
+class ChampionMatchup implements Serializable {
+    int enemyChampId, champId, spell1, spell2, queueID;
     long enemySummonerId, accountSummonerId;
     Platform platform;
     Perks perks;
 
 
-    ChampionMatchup(long id, int myChampId, CurrentGameParticipant currentGameParticipant, Platform p, int qid)
-    {
+    ChampionMatchup(long id, int myChampId, CurrentGameParticipant currentGameParticipant, Platform p, int qid) {
         champId = myChampId;
         perks = currentGameParticipant.getPerks();
         enemyChampId = currentGameParticipant.getChampionId();

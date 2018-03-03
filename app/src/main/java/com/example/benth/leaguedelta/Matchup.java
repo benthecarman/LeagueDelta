@@ -48,7 +48,7 @@ public class Matchup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matchup);
 
-        if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("Night Mode", false))
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("Night Mode", false))
             findViewById(R.id.base1).setBackground(getDrawable(R.drawable.bgd));
 
         // Create the adapter that will return a fragment for each of the three
@@ -112,7 +112,7 @@ public class Matchup extends AppCompatActivity {
             ChampionMatchup matchup = (ChampionMatchup) getActivity().getIntent().getSerializableExtra("x");
             int cdr = getArguments().getInt("cdr");
 
-            if(PreferenceManager.getDefaultSharedPreferences(rootView.getContext()).getBoolean("Night Mode", false))
+            if (PreferenceManager.getDefaultSharedPreferences(rootView.getContext()).getBoolean("Night Mode", false))
                 rootView.findViewById(R.id.base3).setBackground(rootView.getContext().getDrawable(R.drawable.bgd));
 
             String champ = Utilities.champIdToChampName(matchup.enemyChampId, getContext());
@@ -132,10 +132,10 @@ public class Matchup extends AppCompatActivity {
             champ_name.setAllCaps(false);
 
             int keyStoneID = 0;
-            boolean hasUltHat =  matchup.perks.getPerkIds().contains(8243L);
-            boolean hasSpellBook =  matchup.perks.getPerkIds().contains(8326L);
-            boolean hasCosmicInsight =  matchup.perks.getPerkIds().contains(8347L);
-            boolean hasCelerity =  matchup.perks.getPerkIds().contains(8234L);
+            boolean hasUltHat = matchup.perks.getPerkIds().contains(8243L);
+            boolean hasSpellBook = matchup.perks.getPerkIds().contains(8326L);
+            boolean hasCosmicInsight = matchup.perks.getPerkIds().contains(8347L);
+            boolean hasCelerity = matchup.perks.getPerkIds().contains(8234L);
 
             for (long l : matchup.perks.getPerkIds())
                 if (Utilities.isKeystone(l))
@@ -147,8 +147,8 @@ public class Matchup extends AppCompatActivity {
             currentCDR.setText(getString(R.string.current_cdr, cdr));
 
             ImageView qIcon = rootView.findViewById(R.id.q_icon);
-            Bitmap bq = Utilities.getChampAbilityIcon(matchup.enemyChampId,0,getContext());
-            if(bq != null)
+            Bitmap bq = Utilities.getChampAbilityIcon(matchup.enemyChampId, 0, getContext());
+            if (bq != null)
                 qIcon.setImageBitmap(bq);
             else {
                 int qImageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
@@ -158,8 +158,8 @@ public class Matchup extends AppCompatActivity {
             qLabel.setText(abilityCooldowns.get(0));
 
             ImageView wIcon = rootView.findViewById(R.id.w_icon);
-            Bitmap bw = Utilities.getChampAbilityIcon(matchup.enemyChampId,1,getContext());
-            if(bw != null)
+            Bitmap bw = Utilities.getChampAbilityIcon(matchup.enemyChampId, 1, getContext());
+            if (bw != null)
                 wIcon.setImageBitmap(bw);
             else {
                 int wImageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
@@ -169,8 +169,8 @@ public class Matchup extends AppCompatActivity {
             wLabel.setText(abilityCooldowns.get(1));
 
             ImageView eIcon = rootView.findViewById(R.id.e_icon);
-            Bitmap be = Utilities.getChampAbilityIcon(matchup.enemyChampId,2,getContext());
-            if(be != null)
+            Bitmap be = Utilities.getChampAbilityIcon(matchup.enemyChampId, 2, getContext());
+            if (be != null)
                 eIcon.setImageBitmap(be);
             else {
                 int eImageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
@@ -180,8 +180,8 @@ public class Matchup extends AppCompatActivity {
             eLabel.setText(abilityCooldowns.get(2));
 
             ImageView rIcon = rootView.findViewById(R.id.r_icon);
-            Bitmap br = Utilities.getChampAbilityIcon(matchup.enemyChampId,3,getContext());
-            if(br != null)
+            Bitmap br = Utilities.getChampAbilityIcon(matchup.enemyChampId, 3, getContext());
+            if (br != null)
                 rIcon.setImageBitmap(br);
             else {
                 int rImageId = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
@@ -218,7 +218,7 @@ public class Matchup extends AppCompatActivity {
             ss2_icon.setCompoundDrawables(null, d2, null, null);
             ss2_icon.setText("" + cds.get(1) + " s");
 
-            if(keyStoneID != 0) {
+            if (keyStoneID != 0) {
                 TextView keystone_icon = rootView.findViewById(R.id.keystone_icon);
                 int keystoneImageId = c.getResources().getIdentifier("r" + keyStoneID, "drawable", c.getPackageName());
                 Drawable d3 = ContextCompat.getDrawable(this.getContext(), keystoneImageId);
@@ -285,7 +285,7 @@ public class Matchup extends AppCompatActivity {
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
             return fragment;
-         }
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -413,7 +413,7 @@ public class Matchup extends AppCompatActivity {
 
         @Override
         public void onViewCreated(View rootView, Bundle savedInstanceState) {
-            if(PreferenceManager.getDefaultSharedPreferences(rootView.getContext()).getBoolean("Night Mode", false))
+            if (PreferenceManager.getDefaultSharedPreferences(rootView.getContext()).getBoolean("Night Mode", false))
                 rootView.findViewById(R.id.base4).setBackground(rootView.getContext().getDrawable(R.drawable.bgd));
         }
 
@@ -486,19 +486,19 @@ public class Matchup extends AppCompatActivity {
             Bitmap bitmap;
 
             bitmap = Utilities.getChampIcon(Utilities.champIdToChampName(summonerInfo.mastery.get(0).getChampionId(), getContext()));
-            if(bitmap != null)
+            if (bitmap != null)
                 mastery1.setImageBitmap(bitmap);
             else
                 mastery1.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier("invalid", "drawable", root.getContext().getPackageName())));
 
             bitmap = Utilities.getChampIcon(Utilities.champIdToChampName(summonerInfo.mastery.get(1).getChampionId(), getContext()));
-            if(bitmap != null)
+            if (bitmap != null)
                 mastery2.setImageBitmap(bitmap);
             else
                 mastery2.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier("invalid", "drawable", root.getContext().getPackageName())));
 
             bitmap = Utilities.getChampIcon(Utilities.champIdToChampName(summonerInfo.mastery.get(2).getChampionId(), getContext()));
-            if(bitmap != null)
+            if (bitmap != null)
                 mastery3.setImageBitmap(bitmap);
             else
                 mastery3.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier("invalid", "drawable", root.getContext().getPackageName())));
@@ -536,17 +536,6 @@ public class Matchup extends AppCompatActivity {
                 } catch (RiotApiException ignored) {
                     mastery = null;
                 }
-                try {
-                    /*
-                    List<MatchReference> matches = api.getRecentMatchListByAccountId(matchup.platform,api.getSummoner(matchup.platform,matchup.enemySummonerId).getAccountId()).getMatches();
-                    for(MatchReference m: matches)
-                        matchList.add(api.getMatch(matchup.platform, m.getGameId()));
-                    */
-                } catch (Exception e) {
-                    matchList = null;
-                    e.printStackTrace();
-                }
-
                 try {
                     Set<LeaguePosition> positionSet = api.getLeaguePositionsBySummonerId(matchup.platform, matchup.enemySummonerId);
                     summoner = api.getSummoner(matchup.platform, matchup.enemySummonerId);
