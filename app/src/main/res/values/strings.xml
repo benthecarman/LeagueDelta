@@ -31,7 +31,7 @@
     <string name="fire_desc">This player is on fire.</string>
     <string name="cold_desc">This player is still warming up.</string>
     <string name="tilted_desc">This player is currently tilted.</string>
-    <string name="points">%,d points</string>
+    <string name="points">%s points</string>
     <string name="about">About</string>
     <string name="action_about">About</string>
     <string name="crypto">Donate crypto to any of my following addresses!</string>

@@ -2,6 +2,7 @@ package com.example.benth.leaguedelta;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -15,6 +16,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +37,10 @@ import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class Matchup extends AppCompatActivity {
 
@@ -266,15 +271,17 @@ public class Matchup extends AppCompatActivity {
     }
 
 
-    public static class R_And_MFragment extends Fragment { //Runes Fragment
+    public static class RunesFragment extends Fragment { //TODO
         private static final String ARG_SECTION_NUMBER = "section_number";
+        public ChampionMatchup matchup;
+        SummonerInfo summonerInfo;
+        View root;
 
-        public R_And_MFragment() { //TODO
-
+        public RunesFragment() {
         }
 
-         public static R_And_MFragment newInstance(int sectionNumber) {
-            R_And_MFragment fragment = new R_And_MFragment();
+        public static RunesFragment newInstance(int sectionNumber) {
+            RunesFragment fragment = new RunesFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
@@ -284,13 +291,88 @@ public class Matchup extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_runes, container, false);
-            ChampionMatchup matchup = (ChampionMatchup) getActivity().getIntent().getSerializableExtra("x");
+            matchup = (ChampionMatchup) getActivity().getIntent().getSerializableExtra("x");
             return rootView;
+        }
+
+        @Override
+        public void onViewCreated(View rootView, Bundle savedInstanceState) {
+            if (PreferenceManager.getDefaultSharedPreferences(rootView.getContext()).getBoolean("Night Mode", false))
+                rootView.findViewById(R.id.base5).setBackground(rootView.getContext().getDrawable(R.drawable.bgd));
+
+            Context c = getContext();
+
+            int primaryID = c.getResources().getIdentifier("r" + matchup.perks.getPerkStyle(), "drawable", c.getPackageName());
+            int secondaryID = c.getResources().getIdentifier("r" + matchup.perks.getPerkSubStyle(), "drawable", c.getPackageName());
+            int invalid = c.getResources().getIdentifier("invalid", "drawable", c.getPackageName());
+
+            ImageView primary = rootView.findViewById(R.id.primary);
+            ImageView secondary = rootView.findViewById(R.id.secondary);
+            ImageView keystone = rootView.findViewById(R.id.keystone);
+            ImageView t00 = rootView.findViewById(R.id.t00);
+            ImageView t01 = rootView.findViewById(R.id.t01);
+            ImageView t02 = rootView.findViewById(R.id.t02);
+            ImageView t10 = rootView.findViewById(R.id.t10);
+            ImageView t11 = rootView.findViewById(R.id.t11);
+
+            primary.setImageDrawable(ContextCompat.getDrawable(this.getContext(), primaryID));
+            secondary.setImageDrawable(ContextCompat.getDrawable(this.getContext(), secondaryID));
+
+            List<Long> l = matchup.perks.getPerkIds();
+            Log.d("Perks", l.toString());
+
+            try {
+                keystone.setImageDrawable(ContextCompat.getDrawable(this.getContext(), c.getResources().getIdentifier("r" + l.get(0), "drawable", c.getPackageName())));
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+                keystone.setImageDrawable(ContextCompat.getDrawable(this.getContext(), invalid));
+            }
+            try {
+                t00.setImageDrawable(ContextCompat.getDrawable(this.getContext(), c.getResources().getIdentifier("r" + l.get(1), "drawable", c.getPackageName())));
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+                t00.setImageDrawable(ContextCompat.getDrawable(this.getContext(), invalid));
+            }
+            try {
+                t01.setImageDrawable(ContextCompat.getDrawable(this.getContext(), c.getResources().getIdentifier("r" + l.get(2), "drawable", c.getPackageName())));
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+                t01.setImageDrawable(ContextCompat.getDrawable(this.getContext(), invalid));
+            }
+            try {
+                t02.setImageDrawable(ContextCompat.getDrawable(this.getContext(), c.getResources().getIdentifier("r" + l.get(3), "drawable", c.getPackageName())));
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+                t02.setImageDrawable(ContextCompat.getDrawable(this.getContext(), invalid));
+            }
+            try {
+                t10.setImageDrawable(ContextCompat.getDrawable(this.getContext(), c.getResources().getIdentifier("r" + l.get(4), "drawable", c.getPackageName())));
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+                t10.setImageDrawable(ContextCompat.getDrawable(this.getContext(), invalid));
+            }
+            try {
+                t11.setImageDrawable(ContextCompat.getDrawable(this.getContext(), c.getResources().getIdentifier("r" + l.get(5), "drawable", c.getPackageName())));
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+                t11.setImageDrawable(ContextCompat.getDrawable(this.getContext(), invalid));
+            }
         }
     }
 
     public static class SummonerFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
+        private static final NavigableMap<Long, String> suffixes = new TreeMap<>();
+
+        static {
+            suffixes.put(1_000L, "k");
+            suffixes.put(1_000_000L, "M");
+            suffixes.put(1_000_000_000L, "G");
+            suffixes.put(1_000_000_000_000L, "T");
+            suffixes.put(1_000_000_000_000_000L, "P");
+            suffixes.put(1_000_000_000_000_000_000L, "E");
+        }
+
         public ChampionMatchup matchup;
         SummonerInfo summonerInfo;
         View root;
@@ -304,6 +386,21 @@ public class Matchup extends AppCompatActivity {
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
             return fragment;
+        }
+
+        public static String format(long value) {
+            //Long.MIN_VALUE == -Long.MIN_VALUE so we need an adjustment here
+            if (value == Long.MIN_VALUE) return format(Long.MIN_VALUE + 1);
+            if (value < 0) return "-" + format(-value);
+            if (value < 1000) return Long.toString(value); //deal with easy case
+
+            Map.Entry<Long, String> e = suffixes.floorEntry(value);
+            Long divideBy = e.getKey();
+            String suffix = e.getValue();
+
+            long truncated = value / (divideBy / 10); //the number part of the output times 10
+            boolean hasDecimal = truncated < 100 && (truncated / 10d) != (truncated / 10);
+            return hasDecimal ? (truncated / 10d) + suffix : (truncated / 10) + suffix;
         }
 
         @Override
@@ -409,9 +506,9 @@ public class Matchup extends AppCompatActivity {
             else
                 mastery3.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier("invalid", "drawable", root.getContext().getPackageName())));
 
-            masteryPoints1.setText(getString(R.string.points, summonerInfo.mastery.get(0).getChampionPoints()));
-            masteryPoints2.setText(getString(R.string.points, summonerInfo.mastery.get(1).getChampionPoints()));
-            masteryPoints3.setText(getString(R.string.points, summonerInfo.mastery.get(2).getChampionPoints()));
+            masteryPoints1.setText(getString(R.string.points, format(summonerInfo.mastery.get(0).getChampionPoints())));
+            masteryPoints2.setText(getString(R.string.points, format(summonerInfo.mastery.get(1).getChampionPoints())));
+            masteryPoints3.setText(getString(R.string.points, format(summonerInfo.mastery.get(2).getChampionPoints())));
 
             ImageView masteryRank1 = root.findViewById(R.id.mastery1_level);
             ImageView masteryRank2 = root.findViewById(R.id.mastery2_level);
@@ -542,7 +639,7 @@ public class Matchup extends AppCompatActivity {
             if (position == 0)
                 return Matchup.MatchupFragment.newInstance(position + 1, 0);
             if (position == 1)
-                return Matchup.R_And_MFragment.newInstance(position + 1);
+                return RunesFragment.newInstance(position + 1);
             return Matchup.SummonerFragment.newInstance(position + 1);
         }
 
