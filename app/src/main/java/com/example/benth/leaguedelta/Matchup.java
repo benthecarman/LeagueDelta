@@ -32,7 +32,6 @@ import net.rithms.riot.api.endpoints.champion_mastery.dto.ChampionMastery;
 import net.rithms.riot.api.endpoints.league.constant.LeagueQueue;
 import net.rithms.riot.api.endpoints.league.dto.LeaguePosition;
 import net.rithms.riot.api.endpoints.match.dto.Match;
-import net.rithms.riot.api.endpoints.match.dto.ParticipantStats;
 import net.rithms.riot.api.endpoints.summoner.dto.Summoner;
 
 import java.util.LinkedList;
@@ -484,8 +483,6 @@ public class Matchup extends AppCompatActivity {
                 soloqueueRank.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier("provisional", "drawable", root.getContext().getPackageName())));
             }
 
-            doInfo();
-
             Bitmap bitmap;
 
             bitmap = Utilities.getChampIcon(Utilities.champIdToChampName(summonerInfo.mastery.get(0).getChampionId(), getContext()));
@@ -518,53 +515,6 @@ public class Matchup extends AppCompatActivity {
             masteryRank2.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier("mastery" + summonerInfo.mastery.get(1).getChampionLevel(), "drawable", root.getContext().getPackageName())));
             masteryRank3.setImageDrawable(ContextCompat.getDrawable(this.getContext(), root.getContext().getResources().getIdentifier("mastery" + summonerInfo.mastery.get(2).getChampionLevel(), "drawable", root.getContext().getPackageName())));
 
-        }
-
-        private void doInfo() {
-            ImageView info1 = root.findViewById(R.id.info1);
-            ImageView info2 = root.findViewById(R.id.info2);
-            ImageView info3 = root.findViewById(R.id.info3);
-
-            if (summonerInfo.matches != null && summonerInfo.matches.size() > 0) {
-                List<Double> times = new LinkedList<>();
-                List<Boolean> wins = new LinkedList<>();
-                for (Match m : summonerInfo.matches) {
-                    times.add((System.currentTimeMillis() - m.getGameCreation()) * 0.000000277778);
-                    ParticipantStats stat = m.getParticipantByAccountId(summonerInfo.summoner.getAccountId()).getStats();
-                    wins.add(stat.isWin());
-                }
-
-                if (times.get(0) > 4 || times.size() < 3) {
-                    info1.setImageAlpha(0);
-                    info3.setImageAlpha(0);
-                    return;
-                }
-
-                for (int i = 0; i < times.size(); i++)
-                    if (times.get(0) > 4)
-                        wins.remove(i);
-
-                boolean mode = wins.get(0);
-                boolean streak = true;
-                for (int i = 1; i < wins.size(); i++)
-                    if (mode != wins.get(i)) {
-                        streak = false;
-                        break;
-                    }
-
-                if (mode && streak) {
-                    info2.setImageAlpha(0);
-                    info3.setImageAlpha(0);
-                    return;
-                } else if (!mode && streak) {
-                    info1.setImageAlpha(0);
-                    info2.setImageAlpha(0);
-                    return;
-                }
-            }
-            info1.setImageAlpha(0);
-            info2.setImageAlpha(0);
-            info3.setImageAlpha(0);
         }
 
         @SuppressLint("StaticFieldLeak")
