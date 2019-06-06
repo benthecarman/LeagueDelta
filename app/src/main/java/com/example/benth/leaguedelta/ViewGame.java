@@ -45,7 +45,7 @@ public class ViewGame extends AppCompatActivity {
         ImageButton im;
         String champ;
         int imageId;
-        long id = search.summoner.getAccountId();
+        String id = search.summoner.getAccountId();
         Context c;
         Bitmap bitmap;
 

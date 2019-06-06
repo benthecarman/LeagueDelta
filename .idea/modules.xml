@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/LeagueDelta.iml" filepath="$PROJECT_DIR$/LeagueDelta.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$USER_HOME$/Documents/Projects/LeagueDelta/LeagueDelta.iml" filepath="$USER_HOME$/Documents/Projects/LeagueDelta/LeagueDelta.iml" />
+      <module fileurl="file://$USER_HOME$/Documents/Projects/LeagueDelta/app/app.iml" filepath="$USER_HOME$/Documents/Projects/LeagueDelta/app/app.iml" />
     </modules>
   </component>
 </project>

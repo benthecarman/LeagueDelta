@@ -8,12 +8,12 @@ import java.io.Serializable;
 
 class ChampionMatchup implements Serializable {
     int enemyChampId, champId, spell1, spell2, queueID;
-    long enemySummonerId, accountSummonerId;
+    String enemySummonerId, accountSummonerId;
     Platform platform;
     Perks perks;
 
 
-    ChampionMatchup(long id, int myChampId, CurrentGameParticipant currentGameParticipant, Platform p, int qid) {
+    ChampionMatchup(String id, int myChampId, CurrentGameParticipant currentGameParticipant, Platform p, int qid) {
         champId = myChampId;
         perks = currentGameParticipant.getPerks();
         enemyChampId = currentGameParticipant.getChampionId();

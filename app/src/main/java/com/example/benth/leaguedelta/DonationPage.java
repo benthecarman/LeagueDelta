@@ -29,10 +29,7 @@ public class DonationPage extends AppCompatActivity {
         boolean nightMode = sharedPref.getBoolean("Night Mode", false);
         simulateDayNight(nightMode ? 1 : 0);
 
-        String btcAddress = "38qvnY3dwsUSZ79jupUwRrp3wfeX329M4A";
-        String ethAddress = "0xff01ed523b971c313b73e27871f1b011f25c1aa8";
-        String ltcAddress = "MCx8KSqHzUPAsgdxXEp6tbKrqZ1xF3Vcd2";
-        String nanoAddress = "xrb_3i91x9xp9jczrrq5dxggbgshg933o6mq918rcm5n54quyzca95hjpni1zqxw";
+        String btcAddress = "325UiftBi8cFuDTmkLMjNsNcS8HkC6Gaa9";
 
         Element btc = new Element();
         btc.setIconDrawable(R.drawable.btc);
@@ -46,42 +43,6 @@ public class DonationPage extends AppCompatActivity {
             Toast.makeText(DonationPage.this, "Copied to clipboard", Toast.LENGTH_SHORT).show();
         });
 
-        Element eth = new Element();
-        eth.setTitle(ethAddress);
-        eth.setIconDrawable(R.drawable.eth);
-        eth.setAutoApplyIconTint(false);
-        eth.setOnClickListener(v -> {
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("eth", ethAddress);
-            assert clipboard != null;
-            clipboard.setPrimaryClip(clip);
-            Toast.makeText(DonationPage.this, "Copied to clipboard", Toast.LENGTH_SHORT).show();
-        });
-
-        Element ltc = new Element();
-        ltc.setTitle(ltcAddress);
-        ltc.setIconDrawable(R.drawable.ltc);
-        ltc.setAutoApplyIconTint(false);
-        ltc.setOnClickListener(v -> {
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("ltc", ltcAddress);
-            assert clipboard != null;
-            clipboard.setPrimaryClip(clip);
-            Toast.makeText(DonationPage.this, "Copied to clipboard", Toast.LENGTH_SHORT).show();
-        });
-
-        Element nano = new Element();
-        nano.setTitle(nanoAddress);
-        nano.setIconDrawable(R.drawable.nano);
-        nano.setAutoApplyIconTint(false);
-        nano.setOnClickListener(v -> {
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("nano", nanoAddress);
-            assert clipboard != null;
-            clipboard.setPrimaryClip(clip);
-            Toast.makeText(DonationPage.this, "Copied to clipboard", Toast.LENGTH_SHORT).show();
-        });
-
         Element ty = new Element();
         ty.setGravity(Gravity.CENTER_HORIZONTAL);
         ty.setTitle(getString(R.string.ty).toUpperCase());
@@ -90,9 +51,6 @@ public class DonationPage extends AppCompatActivity {
                 .isRTL(false)
                 .setDescription(getString(R.string.crypto))
                 .addItem(btc)
-                .addItem(eth)
-                .addItem(ltc)
-                .addItem(nano)
                 .addItem(ty)
                 .create();
         setContentView(aboutPage);
